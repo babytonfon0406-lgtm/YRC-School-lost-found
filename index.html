@@ -7,18 +7,21 @@
     <style>
         :root { --main-pink: #e10098; --bg: #fdf2f8; --dark: #2f3542; --success: #2ed573; --orange: #ff9f43; }
         body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: var(--bg); margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        .container { max-width: 450px; width: 90%; background: white; padding: 30px; border-radius: 30px; box-shadow: 0 15px 35px rgba(225,0,152,0.1); text-align: center; margin: 20px auto; }
+        
+        .container { max-width: 450px; width: 90%; background: white; padding: 30px; border-radius: 30px; box-shadow: 0 15px 35px rgba(225,0,152,0.1); text-align: center; margin: 20px auto; position: relative; }
         .hidden { display: none !important; }
+        
         header { background: var(--main-pink); color: white; width: 100%; padding: 15px; position: fixed; top: 0; left: 0; z-index: 100; display: flex; align-items: center; justify-content: center; font-weight: bold; }
         .menu-btn { position: absolute; left: 15px; cursor: pointer; font-size: 24px; }
+        
         .sidebar { height: 100%; width: 0; position: fixed; z-index: 1000; top: 0; left: 0; background-color: white; overflow-x: hidden; transition: 0.5s; padding-top: 60px; box-shadow: 2px 0 15px rgba(0,0,0,0.1); }
         .sidebar a { padding: 15px 25px; text-decoration: none; font-size: 16px; color: #444; display: block; border-bottom: 1px solid #f9f9f9; text-align: left; }
-        .input-box, select { width: 100%; padding: 15px; border: 2px solid #eee; border-radius: 15px; box-sizing: border-box; font-size: 16px; margin-bottom: 15px; outline: none; transition: 0.3s; }
-        .input-box:focus { border-color: var(--main-pink); }
-        .btn { width: 100%; padding: 16px; border: none; border-radius: 15px; cursor: pointer; font-weight: bold; font-size: 16px; margin-top: 10px; transition: 0.3s; }
+        
+        .input-box, select { width: 100%; padding: 15px; border: 2px solid #eee; border-radius: 15px; box-sizing: border-box; font-size: 16px; margin-bottom: 15px; outline: none; }
+        .btn { width: 100%; padding: 16px; border: none; border-radius: 15px; cursor: pointer; font-weight: bold; font-size: 16px; margin-top: 10px; }
         .btn-main { background-color: var(--main-pink); color: white; }
         .btn-success { background-color: var(--success); color: white; }
-        .btn-outline { background: none; border: 2px solid var(--main-pink); color: var(--main-pink); padding: 10px; font-size: 14px; }
+        
         .item-card { background: #fff; border: 1px solid #eee; border-left: 5px solid var(--main-pink); padding: 15px; border-radius: 15px; margin-bottom: 12px; text-align: left; }
         .badge { font-size: 11px; padding: 3px 8px; border-radius: 5px; color: white; margin-bottom: 5px; display: inline-block; }
     </style>
@@ -46,7 +49,7 @@
 <div id="loginPage" class="container">
     <h1>Login</h1>
     <input type="number" id="stuID" class="input-box" placeholder="เลขประจำตัวนักเรียน">
-    <input type="password" id="stuPass" class="input-box" placeholder="รหัสผ่าน">
+    <input type="password" id="stuPass" class="input-box" placeholder="กรอกรหัสผ่าน">
     <button class="btn btn-main" onclick="doLogin()">เข้าสู่ระบบ</button>
 </div>
 
@@ -57,13 +60,22 @@
     <div id="globalList"></div>
 </div>
 
+<div id="profilePage" class="container hidden" style="margin-top: 80px;">
+    <h1>👤 ข้อมูลการติดต่อ</h1>
+    <p style="font-size: 14px; color: #666;">ข้อมูลนี้จะแสดงให้คนที่เก็บของได้หรือเจ้าของของเห็น</p>
+    <input type="text" id="pName" class="input-box" placeholder="ชื่อ-นามสกุล">
+    <input type="tel" id="pTel" class="input-box" placeholder="เบอร์โทรศัพท์ที่ติดต่อได้">
+    <button class="btn btn-main" onclick="saveProfile()">บันทึกข้อมูล</button>
+    <button class="btn" onclick="showSection('homePage')" style="background:#eee;">กลับ</button>
+</div>
+
 <div id="foundForm" class="container hidden" style="margin-top: 80px;">
     <h1>🤝 แจ้งพบของ</h1>
     <input type="text" id="fItem" class="input-box" placeholder="พบของอะไร...">
     <select id="fLoc" class="input-box"></select>
     <input type="text" id="fSubLoc" class="input-box" placeholder="ชั้น 2, อัฒจันทร์, หน้าตึก">
     <button class="btn btn-main" onclick="submitPost('found')">บันทึกแจ้งพบ</button>
-    <button class="btn" onclick="showSection('homePage')">ยกเลิก</button>
+    <button class="btn" onclick="showSection('homePage')" style="background:#eee;">ยกเลิก</button>
 </div>
 
 <div id="lostForm" class="container hidden" style="margin-top: 80px;">
@@ -72,7 +84,7 @@
     <select id="lLoc" class="input-box"></select>
     <input type="text" id="lSubLoc" class="input-box" placeholder="ชั้น 2, อัฒจันทร์, หน้าตึก">
     <button class="btn btn-main" style="background:#2f3542;" onclick="submitPost('lost')">บันทึกแจ้งหาย</button>
-    <button class="btn" onclick="showSection('homePage')">ยกเลิก</button>
+    <button class="btn" onclick="showSection('homePage')" style="background:#eee;">ยกเลิก</button>
 </div>
 
 <div id="historyPage" class="container hidden" style="margin-top: 80px;">
@@ -88,22 +100,14 @@
 </div>
 
 <script>
-    const locations = [
-        "ตึก 1 : ตึกยุพราช", "ตึก 2 : เรือนวิเชียร", "ตึก 3 : เรือนรัตน์", "ตึก 4 : เรือนเพชร",
-        "ตึก 5 : เรือนวชิระ", "ตึก 6 : อาคารพัชระ", "ตึก 7 : อาคารรัตนมณี", "ตึก 8 : อาคารศรีมรกต",
-        "ตึก 9 : อาหารนวรัตน์", "ตึก 10 : อาคารเพชรรัตนราชสุดา", "ตึก 11 : อาคารยุพราช 100 ปี",
-        "ตึก 12 : อาคารวชิรดารา", "ตึก 13 : อาคารศูนย์วิทยบริการดารารัศมี", "อาคารพยาบาล 100 ปี",
-        "อาคารประชาสัมพันธ์ 100 ปี", "ธรรมสถาน", "อาคารดนตรีไทย", "โรงช้างต้น", "เรือนแก้ว",
-        "อาคารสมาคมผู้ปกครองและครู (สปย.)", "ศูนย์ประชาสัมพันธ์", "ห้องน้ำรังผึ้ง", "สวนบ้านบานเย็น",
-        "โดมยุพราชรังสรรค์", "โดมอาคาร 2", "โดมอาคาร 5", "โดมอาคาร 7-8", "หน้าโรงเรียน", "หลังโรงเรียน"
-    ];
+    const locations = ["ตึก 1 : ตึกยุพราช", "ตึก 2 : เรือนวิเชียร", "ตึก 3 : เรือนรัตน์", "ตึก 4 : เรือนเพชร", "ตึก 5 : เรือนวชิระ", "ตึก 6 : อาคารพัชระ", "ตึก 7 : อาคารรัตนมณี", "ตึก 8 : อาคารศรีมรกต", "ตึก 9 : อาหารนวรัตน์", "ตึก 10 : อาคารเพชรรัตนราชสุดา", "ตึก 11 : อาคารยุพราช 100 ปี", "ตึก 12 : อาคารวชิรดารา", "ตึก 13 : อาคารศูนย์วิทยบริการดารารัศมี", "อาคารพยาบาล 100 ปี", "อาคารประชาสัมพันธ์ 100 ปี", "ธรรมสถาน", "อาคารดนตรีไทย", "โรงช้างต้น", "เรือนแก้ว", "อาคารสมาคมผู้ปกครองและครู (สปย.)", "ศูนย์ประชาสัมพันธ์", "ห้องน้ำรังผึ้ง", "สวนบ้านบานเย็น", "โดมยุพราชรังสรรค์", "โดมอาคาร 2", "โดมอาคาร 5", "โดมอาคาร 7-8", "หน้าโรงเรียน", "หลังโรงเรียน"];
 
     let posts = JSON.parse(localStorage.getItem('yrc_posts') || '[]');
 
     window.onload = function() {
         const selects = [document.getElementById('fLoc'), document.getElementById('lLoc')];
         selects.forEach(s => {
-            s.innerHTML = '<option value="" disabled selected>เลือกอาคาร/สถานที่</option>';
+            s.innerHTML = '<option value="" disabled selected>เลือกอาคาร/สถานที่หลัก</option>';
             locations.forEach(loc => s.innerHTML += `<option value="${loc}">${loc}</option>`);
         });
     };
@@ -118,24 +122,47 @@
     }
 
     function showSection(id) {
+        // ซ่อนทุกหน้า
         document.querySelectorAll('.container').forEach(c => c.classList.add('hidden'));
+        // แสดง Header ยกเว้นหน้า Login
         document.getElementById('mainHeader').classList.toggle('hidden', id === 'loginPage');
-        document.getElementById(id).classList.remove('hidden');
+        // แสดงหน้าที่เลือก
+        const target = document.getElementById(id);
+        if (target) {
+            target.classList.remove('hidden');
+        }
+        
         if(id === 'homePage') renderGlobal();
         if(id === 'matchPage') renderConfirmArea();
+        if(id === 'profilePage') loadProfile();
         closeNav();
+    }
+
+    function saveProfile() {
+        const user = localStorage.getItem('currentUser');
+        const data = {
+            name: document.getElementById('pName').value,
+            tel: document.getElementById('pTel').value
+        };
+        localStorage.setItem('profile_' + user, JSON.stringify(data));
+        alert("บันทึกข้อมูลเรียบร้อย!");
+        showSection('homePage');
+    }
+
+    function loadProfile() {
+        const user = localStorage.getItem('currentUser');
+        const data = JSON.parse(localStorage.getItem('profile_' + user) || '{}');
+        document.getElementById('pName').value = data.name || '';
+        document.getElementById('pTel').value = data.tel || '';
     }
 
     function submitPost(type) {
         const item = document.getElementById(type==='found'?'fItem':'lItem').value;
         const loc = document.getElementById(type==='found'?'fLoc':'lLoc').value;
         const sub = document.getElementById(type==='found'?'fSubLoc':'lSubLoc').value;
-        if(!item || !loc) return alert("กรุณาระบุชื่อของและสถานที่หลัก");
+        if(!item || !loc) return alert("กรุณาระบุชื่อสิ่งของและสถานที่");
         
-        posts.push({ 
-            id: Date.now(), type, item, loc, sub, 
-            user: localStorage.getItem('currentUser'), status: 'active' 
-        });
+        posts.push({ id: Date.now(), type, item, loc, sub, user: localStorage.getItem('currentUser'), status: 'active' });
         localStorage.setItem('yrc_posts', JSON.stringify(posts));
         alert("ลงประกาศสำเร็จ!");
         showSection('homePage');
@@ -143,13 +170,15 @@
 
     function renderGlobal() {
         const list = document.getElementById('globalList');
-        list.innerHTML = posts.length ? '' : '<p style="color:#999;">ยังไม่มีรายการล่าสุด</p>';
+        list.innerHTML = '';
         posts.filter(p => p.status === 'active').slice().reverse().forEach(p => {
+            const userData = JSON.parse(localStorage.getItem('profile_' + p.user) || '{}');
+            const displayName = userData.name || p.user;
             list.innerHTML += `<div class="item-card">
                 <span class="badge" style="background:${p.type==='found'?'#e10098':'#2f3542'}">${p.type==='found'?'แจ้งพบ':'แจ้งหาย'}</span>
                 <strong> ${p.item}</strong><br>
-                <small>📍 ${p.loc}</small> ${p.sub ? '<br><small style="color:#666;">➥ รายละเอียด: ' + p.sub + '</small>' : ''}
-                <br><button class="btn btn-outline" style="margin-top:10px; width:auto; padding:5px 12px;" onclick="alert('ผู้แจ้ง: '+${p.user})">ดูข้อมูลติดต่อ</button>
+                <small>📍 ${p.loc}</small> ${p.sub ? '<br><small style="color:#666;">➥ '+p.sub+'</small>' : ''}
+                <br><small>👤 ติดต่อ: ${displayName}</small>
             </div>`;
         });
     }
@@ -162,8 +191,8 @@
         list.innerHTML = myPosts.length ? '' : 'ยังไม่มีประวัติ';
         myPosts.reverse().forEach(p => {
             list.innerHTML += `<div class="item-card">
-                <span class="badge" style="background:${p.status==='done'?'#2ed573':'#ff9f43'}">${p.status==='done'?'สำเร็จแล้ว':'กำลังดำเนินการ'}</span><br>
-                <strong>${p.item}</strong><br><small>${p.loc} ${p.sub ? '('+p.sub+')' : ''}</small>
+                <span class="badge" style="background:${p.status==='done'?'#2ed573':'#ff9f43'}">${p.status==='done'?'สำเร็จ':'กำลังรอดำเนินการ'}</span><br>
+                <strong>${p.item}</strong><br><small>${p.loc}</small>
             </div>`;
         });
     }
@@ -176,7 +205,7 @@
         myActive.forEach(p => {
             area.innerHTML += `<div class="item-card">
                 <strong>${p.item}</strong><br><small>${p.loc}</small><br>
-                <button class="btn btn-success" onclick="finishItem(${p.id})">✅ ได้รับของ/ส่งคืนแล้ว</button>
+                <button class="btn btn-success" onclick="finishItem(${p.id})">✅ ยืนยันสำเร็จ</button>
             </div>`;
         });
     }
@@ -185,7 +214,7 @@
         const idx = posts.findIndex(p => p.id === id);
         posts[idx].status = 'done';
         localStorage.setItem('yrc_posts', JSON.stringify(posts));
-        alert("ยินดีด้วยครับ! รายการสำเร็จเรียบร้อย");
+        alert("รายการเสร็จสมบูรณ์!");
         showSection('homePage');
     }
 
