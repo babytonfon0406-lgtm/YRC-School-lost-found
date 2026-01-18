@@ -3,89 +3,222 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YRC Lost & Found System</title>
+    <title>YRC School Lost & Found</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
     <style>
-        :root { --main-pink: #e10098; --bg: #fdf2f8; }
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: var(--bg); margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        .container { max-width: 400px; width: 90%; background: white; padding: 35px; border-radius: 30px; box-shadow: 0 15px 35px rgba(225,0,152,0.1); text-align: center; }
-        .input-box { width: 100%; padding: 15px; border: 2px solid #eee; border-radius: 15px; margin-bottom: 15px; box-sizing: border-box; font-size: 16px; outline: none; }
-        .btn { width: 100%; padding: 16px; border: none; border-radius: 15px; cursor: pointer; font-weight: bold; font-size: 18px; margin-top: 10px; }
-        .btn-main { background-color: var(--main-pink); color: white; }
-        .btn-disabled { background-color: #ccc; cursor: not-allowed; opacity: 0.6; }
-        .hidden { display: none !important; }
-        header { background: var(--main-pink); color: white; width: 100%; padding: 15px; position: fixed; top: 0; left: 0; z-index: 100; text-align: center; }
+        /* --- CSS ทั้งหมด --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Kanit', sans-serif;
+        }
+
+        body {
+            background-color: #fce4ec; /* พื้นหลังชมพูอ่อน */
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navbar */
+        .navbar {
+            background-color: #e2007a; /* ชมพูเข้ม YRC */
+            height: 60px;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            color: white;
+            position: relative;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        /* ปุ่มสามขีด (Hamburger Menu) */
+        .menu-toggle {
+            display: none; /* ซ่อนในหน้าจอคอม */
+            flex-direction: column;
+            cursor: pointer;
+            gap: 4px;
+        }
+
+        .menu-toggle span {
+            width: 25px;
+            height: 3px;
+            background-color: white;
+            transition: 0.3s;
+        }
+
+        /* เมนูลิงก์ */
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .welcome-text {
+            font-size: 1.4rem;
+            margin-bottom: 25px;
+            color: #333;
+        }
+
+        /* ปุ่มต่างๆ */
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: 0.2s;
+            color: white;
+        }
+
+        .btn-found { background-color: #e2007a; }
+        .btn-lost { background-color: #343a40; }
+        .btn:active { transform: scale(0.98); }
+
+        .logout-text {
+            display: inline-block;
+            margin-top: 25px;
+            color: #ff4d4d;
+            text-decoration: none;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        /* --- Responsive สำหรับ iPad/มือถือ --- */
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: flex; /* แสดงปุ่มสามขีด */
+            }
+
+            .nav-links {
+                display: none; /* ซ่อนเมนูปกติ */
+                flex-direction: column;
+                position: absolute;
+                top: 60px;
+                left: 0;
+                width: 100%;
+                background-color: #e2007a;
+                padding: 20px;
+                text-align: center;
+                box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+            }
+
+            .nav-links.active {
+                display: flex; /* แสดงเมื่อกดปุ่มสามขีด */
+            }
+        }
     </style>
 </head>
 <body>
 
-<div id="welcomePage" class="container">
-    <div style="font-size: 70px; margin-bottom: 10px;">🌸</div>
-    <h1 style="color: var(--main-pink);">ยินดีต้อนรับ</h1>
-    <p>ระบบแจ้งของหาย โรงเรียนยุพราชวิทยาลัย</p>
-    <button class="btn btn-main" onclick="showSection('loginPage')">เข้าสู่ระบบ</button>
-</div>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">YRC LOST & FOUND</div>
+            
+            <div class="menu-toggle" id="mobile-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
 
-<div id="loginPage" class="container hidden">
-    <h1 style="color: var(--main-pink);">Login</h1>
-    <div style="text-align: left;">
-        <label style="font-weight: bold;">เลขประจำตัวนักเรียน</label>
-        <input type="number" id="stuID" class="input-box" placeholder="กรอกเลข 5 หลัก" oninput="validate()">
-        <label style="font-weight: bold;">รหัสผ่าน</label>
-        <input type="password" id="stuPass" class="input-box" placeholder="รหัสผ่าน (ใช้เลขเดียวกับ ID)" oninput="validate()">
-    </div>
-    <button id="loginBtn" class="btn btn-main btn-disabled" onclick="doLogin()" disabled>ตกลง</button>
-    <button class="btn" style="background: none; color: #999;" onclick="showSection('welcomePage')">ย้อนกลับ</button>
-</div>
-
-<div id="homePage" class="hidden" style="width: 100%;">
-    <header><b>YRC LOST & FOUND</b></header>
-    <div class="container" style="margin-top: 100px;">
-        <h2 id="greet">ยินดีต้อนรับ</h2>
-        <div style="display: grid; gap: 15px;">
-            <button class="btn btn-main" style="height: 80px;">🤝 แจ้งพบของ</button>
-            <button class="btn" style="background: #2f3542; color: white; height: 80px;">🔍 แจ้งของหาย</button>
+            <ul class="nav-links" id="nav-list">
+                <li><a href="#"><i class="fas fa-home"></i> หน้าแรก</a></li>
+                <li><a href="#"><i class="fas fa-history"></i> ประวัติ</a></li>
+                <li><a href="#" onclick="logout()">ออกจากระบบ</a></li>
+            </ul>
         </div>
-        <button class="btn" style="background: none; color: red; margin-top: 20px;" onclick="location.reload()">ออกจากระบบ</button>
+    </nav>
+
+    <div class="main-content">
+        <div class="card">
+            <h2 class="welcome-text">สวัสดีรหัส 53401</h2>
+            
+            <div class="btn-group">
+                <button class="btn btn-found" onclick="alert('ไปหน้าแจ้งพบของ')">
+                    🤝 แจ้งพบของ
+                </button>
+                <button class="btn btn-lost" onclick="alert('ไปหน้าแจ้งของหาย')">
+                    🔍 แจ้งของหาย
+                </button>
+            </div>
+
+            <a class="logout-text" onclick="logout()">ออกจากระบบ</a>
+        </div>
     </div>
-</div>
 
-<script>
-    function showSection(id) {
-        document.getElementById('welcomePage').classList.add('hidden');
-        document.getElementById('loginPage').classList.add('hidden');
-        document.getElementById('homePage').classList.add('hidden');
-        document.getElementById(id).classList.remove('hidden');
-    }
+    <script>
+        // --- JavaScript ควบคุมเมนูสามขีด ---
+        const menuBtn = document.getElementById('mobile-menu');
+        const navList = document.getElementById('nav-list');
 
-    function validate() {
-        const id = document.getElementById('stuID').value;
-        const pw = document.getElementById('stuPass').value;
-        const btn = document.getElementById('loginBtn');
-        
-        // ขอแค่กรอกเลขให้ครบ 5 หลักพอ ไม่สนว่าจะเป็นเลขอะไร (แก้บัก 53401)
-        if (id.length === 5 && pw.length > 0) {
-            btn.disabled = false;
-            btn.classList.remove('btn-disabled');
-        } else {
-            btn.disabled = true;
-            btn.classList.add('btn-disabled');
+        menuBtn.addEventListener('click', () => {
+            navList.classList.toggle('active');
+            
+            // ทำให้ขีดเปลี่ยนรูปเล็กน้อยเวลาเปิด
+            menuBtn.classList.toggle('open');
+        });
+
+        // ฟังก์ชันออกจากระบบ
+        function logout() {
+            if(confirm('ยืนยันการออกจากระบบ?')) {
+                // เปลี่ยนเป็นชื่อไฟล์หน้า Login ของคุณ
+                window.location.href = 'login.html'; 
+            }
         }
-    }
-
-    function doLogin() {
-        // ดึงค่ามาเป็น String เพื่อป้องกันปัญหาตัวเลข
-        const id = document.getElementById('stuID').value.toString().trim();
-        const pw = document.getElementById('stuPass').value.toString().trim();
-        
-        // เช็คแค่ว่า ID กับ PW ต้องเหมือนกันเป๊ะ (ตามที่คุณสั่ง)
-        if (id === pw) {
-            showSection('homePage');
-            document.getElementById('greet').innerText = "สวัสดีรหัส " + id;
-            document.body.style.alignItems = "flex-start";
-        } else {
-            alert("❌ รหัสผ่านต้องเหมือนกับเลขประจำตัว");
-        }
-    }
-</script>
+    </script>
 </body>
 </html>
