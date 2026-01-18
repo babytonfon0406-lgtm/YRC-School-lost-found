@@ -8,7 +8,7 @@
         :root { --main-pink: #e10098; --bg: #fdf2f8; --dark: #2f3542; --success: #2ed573; --orange: #ff9f43; }
         body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: var(--bg); margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
         
-        .container { max-width: 450px; width: 90%; background: white; padding: 35px; border-radius: 30px; box-shadow: 0 15px 35px rgba(225,0,152,0.1); text-align: center; margin: 20px auto; }
+        .container { max-width: 450px; width: 90%; background: white; padding: 30px; border-radius: 30px; box-shadow: 0 15px 35px rgba(225,0,152,0.1); text-align: center; margin: 20px auto; }
         .hidden { display: none !important; }
         
         header { background: var(--main-pink); color: white; width: 100%; padding: 15px; position: fixed; top: 0; left: 0; z-index: 100; display: flex; align-items: center; justify-content: center; font-weight: bold; }
@@ -17,15 +17,19 @@
         .sidebar { height: 100%; width: 0; position: fixed; z-index: 1000; top: 0; left: 0; background-color: white; overflow-x: hidden; transition: 0.5s; padding-top: 60px; box-shadow: 2px 0 15px rgba(0,0,0,0.1); }
         .sidebar a { padding: 15px 25px; text-decoration: none; font-size: 16px; color: #444; display: block; border-bottom: 1px solid #f9f9f9; text-align: left; }
         
-        .input-box { width: 100%; padding: 15px; border: 2px solid #eee; border-radius: 15px; box-sizing: border-box; font-size: 16px; margin-bottom: 15px; outline: none; }
+        .input-box, select { width: 100%; padding: 15px; border: 2px solid #eee; border-radius: 15px; box-sizing: border-box; font-size: 16px; margin-bottom: 15px; outline: none; }
         .btn { width: 100%; padding: 16px; border: none; border-radius: 15px; cursor: pointer; font-weight: bold; font-size: 16px; margin-top: 10px; transition: 0.3s; }
         .btn-main { background-color: var(--main-pink); color: white; }
         .btn-success { background-color: var(--success); color: white; }
         .btn-orange { background-color: var(--orange); color: white; }
-        .btn-disabled { background-color: #ccc; cursor: not-allowed; opacity: 0.6; }
+        .btn-outline { background: none; border: 2px solid var(--main-pink); color: var(--main-pink); padding: 10px; }
         
-        .item-card { background: #fff; border: 1px solid #eee; border-left: 5px solid var(--main-pink); padding: 15px; border-radius: 15px; margin-bottom: 12px; text-align: left; }
-        .status-badge { font-size: 11px; padding: 3px 8px; border-radius: 5px; color: white; margin-bottom: 5px; display: inline-block; }
+        .item-card { background: #fff; border: 1px solid #eee; border-left: 5px solid var(--main-pink); padding: 15px; border-radius: 15px; margin-bottom: 12px; text-align: left; position: relative; }
+        .badge { font-size: 11px; padding: 3px 8px; border-radius: 5px; color: white; margin-bottom: 5px; display: inline-block; }
+        
+        /* Modal รายละเอียด */
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000; display: flex; justify-content: center; align-items: center; }
+        .modal-content { background: white; padding: 30px; border-radius: 25px; width: 85%; max-width: 400px; text-align: center; }
     </style>
 </head>
 <body>
@@ -37,9 +41,9 @@
         <div id="userDisplay" style="font-weight: bold; margin-top: 10px;">-</div>
     </div>
     <a href="#" onclick="showSection('homePage')">🏠 หน้าหลัก</a>
-    <a href="#" onclick="showSection('profilePage')">👤 ข้อมูลส่วนตัว / ห้อง</a>
-    <a href="#" onclick="showSection('changePassPage')">🔑 เปลี่ยนรหัสผ่าน</a>
-    <a href="#" onclick="showSection('matchPage')">🔔 จัดการของหาย/ยืนยันคืนของ</a>
+    <a href="#" onclick="showSection('profilePage')">👤 ข้อมูลส่วนตัว / ช่องทางติดต่อ</a>
+    <a href="#" onclick="showHistory()">📜 ประวัติการแจ้งของฉัน</a>
+    <a href="#" onclick="showSection('matchPage')">🔔 จัดการการคืนของ (ยืนยัน)</a>
     <a href="#" onclick="location.reload()" style="color:red; margin-top: 20px;">🚪 ออกจากระบบ</a>
 </div>
 
@@ -50,87 +54,76 @@
 
 <div id="loginPage" class="container">
     <h1>Login</h1>
-    <div style="text-align: left;">
-        <label style="font-weight:bold; color:#555;">เลขประจำตัวนักเรียน</label>
-        <input type="number" id="stuID" class="input-box" placeholder="กรอกเลข 5 หลัก" oninput="validateLogin()">
-        <label style="font-weight:bold; color:#555;">รหัสผ่าน</label>
-        <input type="password" id="stuPass" class="input-box" placeholder="กรอกรหัสผ่าน" oninput="validateLogin()">
-    </div>
-    <button id="loginBtn" class="btn btn-main btn-disabled" onclick="doLogin()" disabled>เข้าสู่ระบบ</button>
+    <input type="number" id="stuID" class="input-box" placeholder="เลขประจำตัวนักเรียน" oninput="validateLogin()">
+    <input type="password" id="stuPass" class="input-box" placeholder="รหัสผ่าน" oninput="validateLogin()">
+    <button id="loginBtn" class="btn btn-main" style="opacity:0.5" onclick="doLogin()" disabled>เข้าสู่ระบบ</button>
 </div>
 
 <div id="homePage" class="container hidden" style="margin-top: 80px;">
     <button class="btn btn-main" style="height: 80px;" onclick="showSection('foundForm')">🤝 แจ้งพบของ</button>
-    <button class="btn btn-dark" style="height: 80px; margin-top: 10px; background:#2f3542; color:white;" onclick="showSection('lostForm')">🔍 แจ้งของหาย</button>
+    <button class="btn" style="height: 80px; margin-top: 10px; background:#2f3542; color:white;" onclick="showSection('lostForm')">🔍 แจ้งของหาย</button>
     <h3 style="text-align: left; margin-top: 25px; border-bottom: 2px solid var(--main-pink);">รายการล่าสุด</h3>
     <div id="globalList"></div>
 </div>
 
-<div id="matchPage" class="container hidden" style="margin-top: 80px;">
-    <h2>🔔 การยืนยันคืนของ</h2>
-    <p style="font-size: 13px; color: #666;">รายการจะสมบูรณ์เมื่อ "คนพบ" และ "เจ้าของ" กดยืนยันทั้งคู่</p>
-    <div id="confirmArea"></div>
-    <button class="btn" onclick="showSection('homePage')">กลับ</button>
-</div>
-
-<div id="profilePage" class="container hidden" style="margin-top: 80px;">
-    <h1>👤 โปรไฟล์</h1>
-    <input type="text" id="pName" class="input-box" placeholder="ชื่อ-นามสกุล">
-    <select id="pRoom" class="input-box"></select>
-    <button class="btn btn-main" onclick="saveProfile()">บันทึก</button>
-    <button class="btn" onclick="showSection('homePage')">กลับ</button>
-</div>
-
-<div id="changePassPage" class="container hidden" style="margin-top: 80px;">
-    <h1>🔑 เปลี่ยนรหัสผ่าน</h1>
-    <input type="password" id="newPass" class="input-box" placeholder="รหัสผ่านใหม่">
-    <input type="password" id="confirmNewPass" class="input-box" placeholder="ยืนยันรหัสผ่านใหม่">
-    <button class="btn btn-main" onclick="changePassword()">บันทึกรหัสใหม่</button>
-    <button class="btn" onclick="showSection('homePage')">กลับ</button>
-</div>
-
 <div id="foundForm" class="container hidden" style="margin-top: 80px;">
-    <h1>แจ้งพบของ</h1>
-    <input type="text" id="fItem" class="input-box" placeholder="เจออะไร...">
-    <input type="text" id="fLoc" class="input-box" placeholder="เจอที่ไหน...">
-    <button class="btn btn-main" onclick="submitPost('found')">ลงประกาศ</button>
+    <h1>🤝 แจ้งพบของ</h1>
+    <input type="text" id="fItem" class="input-box" placeholder="ชื่อสิ่งของที่พบ...">
+    <select id="fLoc" class="input-box"></select>
+    <button class="btn btn-main" onclick="submitPost('found')">ลงประกาศแจ้งพบ</button>
     <button class="btn" onclick="showSection('homePage')">ยกเลิก</button>
 </div>
 
 <div id="lostForm" class="container hidden" style="margin-top: 80px;">
-    <h1>แจ้งของหาย</h1>
-    <input type="text" id="lItem" class="input-box" placeholder="ทำอะไรหาย...">
-    <input type="text" id="lLoc" class="input-box" placeholder="หายที่ไหน...">
-    <button class="btn btn-main" onclick="submitPost('lost')">ลงประกาศ</button>
+    <h1>🔍 แจ้งของหาย</h1>
+    <input type="text" id="lItem" class="input-box" placeholder="ชื่อสิ่งของที่ทำหาย...">
+    <select id="lLoc" class="input-box"></select>
+    <button class="btn btn-main" style="background:#2f3542;" onclick="submitPost('lost')">ลงประกาศตามหา</button>
     <button class="btn" onclick="showSection('homePage')">ยกเลิก</button>
 </div>
 
+<div id="historyPage" class="container hidden" style="margin-top: 80px;">
+    <h1>📜 ประวัติการแจ้ง</h1>
+    <div id="historyList"></div>
+    <button class="btn" onclick="showSection('homePage')">กลับ</button>
+</div>
+
+<div id="contactModal" class="modal hidden">
+    <div class="modal-content">
+        <h2 id="modalTitle">รายละเอียด</h2>
+        <p id="modalInfo" style="text-align: left; background: #f9f9f9; padding: 15px; border-radius: 15px;"></p>
+        <button id="claimBtn" class="btn btn-success hidden" onclick="claimItem()">นี่คือของของฉัน</button>
+        <button class="btn" onclick="closeModal()">ปิดหน้าต่าง</button>
+    </div>
+</div>
+
+<div id="matchPage" class="container hidden" style="margin-top: 80px;">
+    <h2>🔔 ยืนยันการคืนของ</h2>
+    <div id="confirmArea"></div>
+    <button class="btn" onclick="showSection('homePage')">กลับ</button>
+</div>
+
 <script>
-    // ข้อมูลจำลองสำหรับทดสอบ (ควรเก็บใน DB จริง)
+    const locations = ["สนามฟุตบอล", "โดมยุพราช", "โรงอาหาร", "ห้องน้ำ", "ตึก 1", "ตึก 2", "ตึก 3", "ตึกวิทยบริการ", "หน้าโรงเรียน"];
     let posts = JSON.parse(localStorage.getItem('yrc_posts') || '[]');
+    let currentDetailId = null;
 
     window.onload = function() {
-        const rm = document.getElementById('pRoom');
-        for(let i=1; i<=17; i++) rm.innerHTML += `<option value="${i}">ห้อง ${i}</option>`;
+        const selects = [document.getElementById('fLoc'), document.getElementById('lLoc')];
+        selects.forEach(s => locations.forEach(l => s.innerHTML += `<option value="${l}">${l}</option>`));
     };
 
     function validateLogin() {
-        const id = document.getElementById('stuID').value;
-        const pw = document.getElementById('stuPass').value;
         const btn = document.getElementById('loginBtn');
-        btn.disabled = !(id.length === 5 && pw.length > 0);
-        btn.classList.toggle('btn-disabled', btn.disabled);
+        btn.disabled = !(document.getElementById('stuID').value.length === 5);
+        btn.style.opacity = btn.disabled ? 0.5 : 1;
     }
 
     function doLogin() {
         const id = document.getElementById('stuID').value;
-        const pw = document.getElementById('stuPass').value;
-        const savedPW = localStorage.getItem('pw_' + id) || id;
-        if (pw === savedPW) {
-            localStorage.setItem('currentUser', id);
-            document.getElementById('userDisplay').innerText = "ID: " + id;
-            showSection('homePage');
-        } else { alert("รหัสผ่านไม่ถูกต้อง"); }
+        localStorage.setItem('currentUser', id);
+        document.getElementById('userDisplay').innerText = "ID: " + id;
+        showSection('homePage');
     }
 
     function showSection(id) {
@@ -145,13 +138,9 @@
     function submitPost(type) {
         const item = document.getElementById(type==='found'?'fItem':'lItem').value;
         const loc = document.getElementById(type==='found'?'fLoc':'lLoc').value;
-        if(!item || !loc) return alert("กรุณากรอกข้อมูล");
-        posts.push({ 
-            id: Date.now(), type, item, loc, 
-            user: localStorage.getItem('currentUser'),
-            confFound: false, confOwner: false, status: 'active'
-        });
-        saveData();
+        posts.push({ id: Date.now(), type, item, loc, user: localStorage.getItem('currentUser'), status: 'active', confFound: false, confOwner: false });
+        localStorage.setItem('yrc_posts', JSON.stringify(posts));
+        alert("ลงประกาศสำเร็จ");
         showSection('homePage');
     }
 
@@ -160,8 +149,43 @@
         list.innerHTML = '';
         posts.filter(p => p.status === 'active').slice().reverse().forEach(p => {
             list.innerHTML += `<div class="item-card">
-                <span class="status-badge" style="background:${p.type==='found'?'#e10098':'#2f3542'}">${p.type==='found'?'แจ้งพบ':'แจ้งหาย'}</span>
-                <strong> ${p.item}</strong><br><small>📍 ${p.loc} | โดย: ${p.user}</small>
+                <span class="badge" style="background:${p.type==='found'?'#e10098':'#2f3542'}">${p.type==='found'?'แจ้งพบ':'แจ้งหาย'}</span>
+                <strong> ${p.item}</strong><br><small>📍 ${p.loc}</small><br>
+                <button class="btn btn-outline" style="margin-top:10px;" onclick="viewDetail(${p.id})">ดูรายละเอียด & ติดต่อ</button>
+            </div>`;
+        });
+    }
+
+    function viewDetail(id) {
+        currentDetailId = id;
+        const p = posts.find(x => x.id === id);
+        const modal = document.getElementById('contactModal');
+        const info = document.getElementById('modalInfo');
+        const claimBtn = document.getElementById('claimBtn');
+        
+        info.innerHTML = `📦 ของ: ${p.item}<br>📍 สถานที่: ${p.loc}<br>👤 ผู้แจ้ง: ${p.user}<br>📞 ติดต่อ: 0XX-XXX-XXXX (ตัวอย่าง)`;
+        
+        // ถ้าเป็นคนอื่นมาดู และรายการเป็น "แจ้งพบ" ให้โชว์ปุ่มยืนยันว่าเป็นเจ้าของ
+        claimBtn.classList.toggle('hidden', p.user === localStorage.getItem('currentUser') || p.type === 'lost');
+        
+        modal.classList.remove('hidden');
+    }
+
+    function claimItem() {
+        alert("แจ้งเจ้าของระบบแล้ว! กรุณาไปที่เมนู 'จัดการการคืนของ' เพื่อกดยืนยันหลังจากได้รับของจริง");
+        closeModal();
+    }
+
+    function showHistory() {
+        showSection('historyPage');
+        const list = document.getElementById('historyList');
+        const user = localStorage.getItem('currentUser');
+        const myPosts = posts.filter(p => p.user === user);
+        list.innerHTML = myPosts.length ? '' : 'ยังไม่มีประวัติ';
+        myPosts.reverse().forEach(p => {
+            list.innerHTML += `<div class="item-card">
+                <span class="badge" style="background:${p.status==='done'?'#2ed573':'#ff9f43'}">${p.status==='done'?'สำเร็จ':'กำลังรอดำเนินการ'}</span><br>
+                ${p.item} (${p.type==='found'?'แจ้งพบ':'แจ้งหาย'})
             </div>`;
         });
     }
@@ -170,55 +194,27 @@
         const area = document.getElementById('confirmArea');
         const user = localStorage.getItem('currentUser');
         area.innerHTML = '';
-        
-        posts.forEach(p => {
-            if(p.status === 'done') return;
-            
-            // กรณีเราเป็นคนแจ้งพบ (รอคนยืนยันคืน)
-            if(p.user === user && p.type === 'found') {
-                area.innerHTML += `<div class="item-card">
-                    <strong>คุณพบ: ${p.item}</strong><br>
-                    <button class="btn ${p.confFound?'btn-disabled':'btn-success'}" onclick="confirmAction(${p.id}, 'found')" ${p.confFound?'disabled':''}>
-                        ${p.confFound ? '✅ ยืนยันคืนของแล้ว' : 'กดเมื่อคุณคืนของให้เจ้าของแล้ว'}
-                    </button>
-                    ${!p.confOwner ? '<p style="font-size:11px; color:orange;">* รอเจ้าของกดยืนยันรับของ</p>' : ''}
-                </div>`;
-            }
-
-            // กรณีเราเป็นคนแจ้งหาย (รอคนยืนยันรับ)
-            if(p.user === user && p.type === 'lost') {
-                area.innerHTML += `<div class="item-card">
-                    <strong>คุณทำหาย: ${p.item}</strong><br>
-                    <button class="btn ${p.confOwner?'btn-disabled':'btn-orange'}" onclick="confirmAction(${p.id}, 'owner')" ${p.confOwner?'disabled':''}>
-                        ${p.confOwner ? '✅ ยืนยันได้รับของแล้ว' : 'กดเมื่อคุณได้รับของคืนแล้ว'}
-                    </button>
-                    ${!p.confFound ? '<p style="font-size:11px; color:orange;">* รอคนพบกดยืนยันการคืน</p>' : ''}
-                </div>`;
-            }
+        posts.filter(p => p.user === user && p.status !== 'done').forEach(p => {
+            area.innerHTML += `<div class="item-card">
+                <strong>${p.item}</strong><br>
+                <button class="btn btn-success" onclick="confirmVerify(${p.id})">
+                    ${p.type==='found' ? 'ยืนยันว่าคืนของแล้ว' : 'ยืนยันว่าได้รับของแล้ว'}
+                </button>
+            </div>`;
         });
     }
 
-    function confirmAction(postId, role) {
-        const idx = posts.findIndex(p => p.id === postId);
-        if(role === 'found') posts[idx].confFound = true;
-        if(role === 'owner') posts[idx].confOwner = true;
-        
-        // เช็คว่ากดครบทั้งสองฝั่งหรือยัง
-        if(posts[idx].confFound && posts[idx].confOwner) {
-            posts[idx].status = 'done';
-            alert("🎉 การส่งคืนสมบูรณ์! รายการถูกปิดเรียบร้อย");
-        } else {
-            alert("บันทึกการยืนยันแล้ว รออีกฝ่ายกดยืนยันให้ครบ");
-        }
-        saveData();
-        renderConfirmArea();
+    function confirmVerify(id) {
+        const idx = posts.findIndex(p => p.id === id);
+        posts[idx].status = 'done';
+        localStorage.setItem('yrc_posts', JSON.stringify(posts));
+        alert("ยืนยันสำเร็จ! รายการถูกย้ายไปที่ประวัติแล้ว");
+        showSection('homePage');
     }
 
-    function saveData() { localStorage.setItem('yrc_posts', JSON.stringify(posts)); }
+    function closeModal() { document.getElementById('contactModal').classList.add('hidden'); }
     function openNav() { document.getElementById("mySidebar").style.width = "280px"; }
     function closeNav() { document.getElementById("mySidebar").style.width = "0"; }
-    function saveProfile() { alert("บันทึกโปรไฟล์แล้ว"); showSection('homePage'); }
-    function changePassword() { alert("เปลี่ยนรหัสผ่านแล้ว"); showSection('homePage'); }
 </script>
 </body>
 </html>
