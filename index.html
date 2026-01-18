@@ -5,146 +5,65 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YRC Lost & Found System</title>
     <style>
-        :root { --main-pink: #e10098; --light-pink: #fce4ec; --dark-pink: #c20084; --bg: #fdf2f8; }
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: var(--bg); margin: 0; overflow-x: hidden; color: #333; }
-        
-        /* Navigation & Layout */
-        header { background: var(--main-pink); color: white; padding: 15px; display: flex; align-items: center; position: sticky; top: 0; z-index: 500; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .sidebar { height: 100%; width: 0; position: fixed; z-index: 1000; top: 0; left: 0; background-color: white; overflow-x: hidden; transition: 0.5s; padding-top: 60px; box-shadow: 2px 0 15px rgba(0,0,0,0.1); }
-        .sidebar a { padding: 12px 25px; text-decoration: none; font-size: 16px; color: #444; display: block; border-bottom: 1px solid #f9f9f9; }
-        
-        .container { max-width: 450px; margin: 20px auto; background: white; padding: 30px; border-radius: 25px; box-shadow: 0 10px 30px rgba(225,0,152,0.1); text-align: center; min-height: 300px; }
-        
-        /* Form Elements */
-        .input-box, select { width: 100%; padding: 14px; border: 2px solid #eee; border-radius: 12px; margin-bottom: 15px; box-sizing: border-box; font-size: 16px; outline: none; }
-        .input-box:focus { border-color: var(--main-pink); }
-        
-        .btn { width: 100%; padding: 16px; border: none; border-radius: 15px; cursor: pointer; font-weight: bold; font-size: 18px; transition: 0.3s; margin-top: 10px; display: block; text-decoration: none; }
+        :root { --main-pink: #e10098; --bg: #fdf2f8; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: var(--bg); margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .container { max-width: 400px; width: 90%; background: white; padding: 35px; border-radius: 30px; box-shadow: 0 15px 35px rgba(225,0,152,0.1); text-align: center; }
+        .input-box { width: 100%; padding: 15px; border: 2px solid #eee; border-radius: 15px; margin-bottom: 15px; box-sizing: border-box; font-size: 16px; outline: none; }
+        .btn { width: 100%; padding: 16px; border: none; border-radius: 15px; cursor: pointer; font-weight: bold; font-size: 18px; margin-top: 10px; }
         .btn-main { background-color: var(--main-pink); color: white; }
-        .btn-dark { background-color: #2f3542; color: white; }
-        .btn-disabled { opacity: 0.5; cursor: not-allowed; }
-        
+        .btn-disabled { background-color: #ccc; cursor: not-allowed; opacity: 0.6; }
         .hidden { display: none !important; }
-        .item-card { border-left: 5px solid var(--main-pink); background: #fff; padding: 15px; border-radius: 12px; margin-top: 15px; border: 1px solid #eee; text-align: left; }
-        .status-badge { padding: 2px 8px; border-radius: 5px; font-size: 11px; color: white; margin-right: 5px; }
+        header { background: var(--main-pink); color: white; width: 100%; padding: 15px; position: fixed; top: 0; left: 0; z-index: 100; text-align: center; }
     </style>
 </head>
 <body>
 
-<div id="mySidebar" class="sidebar">
-    <span style="position:absolute;top:10px;right:25px;font-size:36px;cursor:pointer;" onclick="closeNav()">&times;</span>
-    <div style="text-align:center; padding: 20px;">
-        <div style="width:60px; height:60px; background:var(--main-pink); color:white; border-radius:50%; margin:auto; line-height:60px; font-size:25px;">🌸</div>
-        <h4 id="sideUserDisp" style="margin-top:10px;">รหัสนักเรียน: -</h4>
-    </div>
-    <a href="#" onclick="showSection('homePage')">🏠 หน้าหลัก</a>
-    <a href="#" onclick="showSection('profilePage')">👤 แก้ไขข้อมูลส่วนตัว / ห้อง</a>
-    <a href="#" onclick="showHistory('found')">📜 ประวัติแจ้งเจอของ</a>
-    <a href="#" onclick="showHistory('lost')">🔍 ประวัติแจ้งของหาย</a>
-    <a href="#" onclick="logout()" style="color:red; border-top: 1px solid #eee;">🚪 ออกจากระบบ</a>
+<div id="welcomePage" class="container">
+    <div style="font-size: 70px; margin-bottom: 10px;">🌸</div>
+    <h1 style="color: var(--main-pink);">ยินดีต้อนรับ</h1>
+    <p>ระบบแจ้งของหาย โรงเรียนยุพราชวิทยาลัย</p>
+    <button class="btn btn-main" onclick="showSection('loginPage')">เข้าสู่ระบบ</button>
 </div>
 
-<header id="mainHeader" class="hidden">
-    <span style="font-size:24px; cursor:pointer; margin-right:15px;" onclick="openNav()">&#9776;</span>
-    <b>YRC LOST & FOUND</b>
-</header>
-
-<div class="container" id="mainContainer">
-    
-    <div id="welcomePage">
-        <div style="font-size: 80px; margin-bottom: 20px;">🌸</div>
-        <h1 style="color: var(--main-pink);">ยินดีต้อนรับ</h1>
-        <p>ระบบแจ้งของหายและตามหาของหาย<br>โรงเรียนยุพราชวิทยาลัย</p>
-        <button class="btn btn-main" onclick="showSection('loginPage')">เข้าสู่ระบบเพื่อใช้งาน</button>
+<div id="loginPage" class="container hidden">
+    <h1 style="color: var(--main-pink);">Login</h1>
+    <div style="text-align: left;">
+        <label style="font-weight: bold;">เลขประจำตัวนักเรียน</label>
+        <input type="number" id="stuID" class="input-box" placeholder="กรอกเลข 5 หลัก" oninput="validate()">
+        <label style="font-weight: bold;">รหัสผ่าน</label>
+        <input type="password" id="stuPass" class="input-box" placeholder="รหัสผ่าน (ใช้เลขเดียวกับ ID)" oninput="validate()">
     </div>
-
-    <div id="loginPage" class="hidden">
-        <h1 style="color: var(--main-pink);">Login</h1>
-        <div style="text-align: left;">
-            <label style="font-weight: bold;">เลขประจำตัวนักเรียน</label>
-            <input type="number" id="stuID" class="input-box" placeholder="กรอกเลข 5 หลัก" oninput="checkLoginReady()">
-            
-            <label style="font-weight: bold;">รหัสผ่าน</label>
-            <input type="password" id="stuPass" class="input-box" placeholder="กรอกรหัสผ่าน" oninput="checkLoginReady()">
-        </div>
-        <button id="loginBtn" class="btn btn-main btn-disabled" onclick="handleLogin()" disabled>เข้าสู่ระบบ</button>
-        <button class="btn" style="background:none; color:#999; font-size:14px;" onclick="showSection('welcomePage')">ย้อนกลับ</button>
-    </div>
-
-    <div id="homePage" class="hidden">
-        <button class="btn btn-main" style="height: 90px; font-size: 20px;" onclick="showSection('addFoundPage')">🤝 ฉันเจอของหาย (แจ้งพบ)</button>
-        <button class="btn btn-dark" style="height: 90px; font-size: 20px; margin-top: 15px;" onclick="showSection('addLostPage')">🔍 ฉันทำของหาย (แจ้งหาย)</button>
-        
-        <h3 style="text-align: left; margin-top: 35px; border-bottom: 2px solid var(--main-pink); padding-bottom: 5px;">รายการล่าสุด</h3>
-        <div id="globalList"></div>
-    </div>
-
-    <div id="addFoundPage" class="hidden">
-        <h2>🤝 แจ้งพบของหาย</h2>
-        <input type="text" id="fItem" class="input-box" placeholder="คุณเจออะไร...">
-        <input list="locList" id="fLoc" class="input-box" placeholder="เจอที่ไหน (อาคาร/สถานที่)...">
-        <button class="btn btn-main" onclick="saveNewPost('found')">ลงประกาศแจ้งพบ</button>
-        <button class="btn" onclick="showSection('homePage')">ยกเลิก</button>
-    </div>
-
-    <div id="addLostPage" class="hidden">
-        <h2>🔍 แจ้งของหาย</h2>
-        <input type="text" id="lItem" class="input-box" placeholder="อะไรหายไป...">
-        <input list="locList" id="lLoc" class="input-box" placeholder="คาดว่าหายที่ไหน...">
-        <button class="btn btn-main" onclick="saveNewPost('lost')">ลงประกาศตามหา</button>
-        <button class="btn" onclick="showSection('homePage')">ยกเลิก</button>
-    </div>
-
-    <div id="profilePage" class="hidden">
-        <h2>👤 ข้อมูลส่วนตัว</h2>
-        <input type="text" id="pName" class="input-box" placeholder="ชื่อ-นามสกุล">
-        <div style="display:flex; gap:10px;">
-            <select id="pLevel" class="input-box"></select>
-            <select id="pRoom" class="input-box"></select>
-        </div>
-        <input type="tel" id="pTel" class="input-box" placeholder="เบอร์โทรติดต่อ">
-        <input type="text" id="pIG" class="input-box" placeholder="Instagram ID">
-        <button class="btn btn-main" onclick="saveProfileData()">บันทึกข้อมูล</button>
-    </div>
-
-    <div id="historyPage" class="hidden">
-        <h2 id="histTitle">ประวัติการแจ้ง</h2>
-        <div id="histList"></div>
-        <button class="btn btn-dark" onclick="showSection('homePage')">กลับหน้าหลัก</button>
-    </div>
-
+    <button id="loginBtn" class="btn btn-main btn-disabled" onclick="doLogin()" disabled>ตกลง</button>
+    <button class="btn" style="background: none; color: #999;" onclick="showSection('welcomePage')">ย้อนกลับ</button>
 </div>
 
-<datalist id="locList"></datalist>
+<div id="homePage" class="hidden" style="width: 100%;">
+    <header><b>YRC LOST & FOUND</b></header>
+    <div class="container" style="margin-top: 100px;">
+        <h2 id="greet">ยินดีต้อนรับ</h2>
+        <div style="display: grid; gap: 15px;">
+            <button class="btn btn-main" style="height: 80px;">🤝 แจ้งพบของ</button>
+            <button class="btn" style="background: #2f3542; color: white; height: 80px;">🔍 แจ้งของหาย</button>
+        </div>
+        <button class="btn" style="background: none; color: red; margin-top: 20px;" onclick="location.reload()">ออกจากระบบ</button>
+    </div>
+</div>
 
 <script>
-    const locations = ["ตึก 1 ยุพราช", "ตึก 2 เรือนวิเชียร", "ตึก 3 เรือนรัตน์", "ตึก 4 เรือนเพชร", "ตึก 5 เรือนวชิระ", "ตึก 6 พัชระ", "ตึก 7 รัตนมณี", "ตึก 8 ศรีมรกต", "ตึก 9 นวรัตน์", "ตึก 10 เพชรรัตน์ฯ", "ตึก 11 ยุพราช 100 ปี", "ตึก 12 วชิรดารา", "โดมยุพราชรังสรรค์", "โรงอาหาร", "ห้องน้ำ", "สนามหญ้า"];
+    function showSection(id) {
+        document.getElementById('welcomePage').classList.add('hidden');
+        document.getElementById('loginPage').classList.add('hidden');
+        document.getElementById('homePage').classList.add('hidden');
+        document.getElementById(id).classList.remove('hidden');
+    }
 
-    window.onload = function() {
-        // สร้างตัวเลือกห้อง 1-17 และชั้น
-        const lv = document.getElementById('pLevel');
-        const rm = document.getElementById('pRoom');
-        for(let i=1; i<=6; i++) lv.innerHTML += `<option value="ม.${i}">ม.${i}</option>`;
-        for(let i=1; i<=17; i++) rm.innerHTML += `<option value="${i}">ห้อง ${i}</option>`;
-        
-        // สร้างรายการสถานที่
-        const dl = document.getElementById('locList');
-        locations.forEach(l => dl.innerHTML += `<option value="${l}">`);
-        
-        // ตรวจสอบว่า Login ค้างไว้ไหม
-        const savedUser = localStorage.getItem('currentUser');
-        if(savedUser) {
-            document.getElementById('mainHeader').classList.remove('hidden');
-            document.getElementById('sideUserDisp').innerText = "รหัสนักเรียน: " + savedUser;
-            showSection('homePage');
-        }
-    };
-
-    function checkLoginReady() {
+    function validate() {
         const id = document.getElementById('stuID').value;
         const pw = document.getElementById('stuPass').value;
         const btn = document.getElementById('loginBtn');
-        if(id.length === 5 && pw.length > 0) {
+        
+        // ขอแค่กรอกเลขให้ครบ 5 หลักพอ ไม่สนว่าจะเป็นเลขอะไร (แก้บัก 53401)
+        if (id.length === 5 && pw.length > 0) {
             btn.disabled = false;
             btn.classList.remove('btn-disabled');
         } else {
@@ -153,99 +72,20 @@
         }
     }
 
-    function handleLogin() {
-        const id = document.getElementById('stuID').value.toString();
-        const pw = document.getElementById('stuPass').value.toString();
-        // รหัสเริ่มต้นคือเลขประจำตัวเป๊ะๆ (แก้บักเลข 53401)
-        const correctPW = localStorage.getItem('pass_' + id) || id;
-
-        if(pw === correctPW.toString()) {
-            localStorage.setItem('currentUser', id);
-            document.getElementById('mainHeader').classList.remove('hidden');
-            document.getElementById('sideUserDisp').innerText = "รหัสนักเรียน: " + id;
+    function doLogin() {
+        // ดึงค่ามาเป็น String เพื่อป้องกันปัญหาตัวเลข
+        const id = document.getElementById('stuID').value.toString().trim();
+        const pw = document.getElementById('stuPass').value.toString().trim();
+        
+        // เช็คแค่ว่า ID กับ PW ต้องเหมือนกันเป๊ะ (ตามที่คุณสั่ง)
+        if (id === pw) {
             showSection('homePage');
+            document.getElementById('greet').innerText = "สวัสดีรหัส " + id;
+            document.body.style.alignItems = "flex-start";
         } else {
-            alert("❌ รหัสผ่านไม่ถูกต้อง");
+            alert("❌ รหัสผ่านต้องเหมือนกับเลขประจำตัว");
         }
     }
-
-    function showSection(id) {
-        const all = ['welcomePage', 'loginPage', 'homePage', 'addFoundPage', 'addLostPage', 'profilePage', 'historyPage'];
-        all.forEach(s => document.getElementById(s).classList.add('hidden'));
-        document.getElementById(id).classList.remove('hidden');
-        if(id === 'homePage') renderGlobalItems();
-        closeNav();
-    }
-
-    function saveNewPost(type) {
-        const item = document.getElementById(type === 'found' ? 'fItem' : 'lItem').value;
-        const loc = document.getElementById(type === 'found' ? 'fLoc' : 'lLoc').value;
-        const user = localStorage.getItem('currentUser');
-
-        if(!item || !loc) return alert("กรุณากรอกข้อมูลให้ครบ");
-
-        const posts = JSON.parse(localStorage.getItem('yrc_posts') || '[]');
-        posts.push({ id: Date.now(), type, item, loc, user, date: new Date().toLocaleString('th-TH') });
-        localStorage.setItem('yrc_posts', JSON.stringify(posts));
-        
-        alert("ลงประกาศเรียบร้อยแล้ว");
-        showSection('homePage');
-        // ล้างค่าในฟอร์ม
-        document.getElementById('fItem').value = ''; document.getElementById('fLoc').value = '';
-        document.getElementById('lItem').value = ''; document.getElementById('lLoc').value = '';
-    }
-
-    function renderGlobalItems() {
-        const list = document.getElementById('globalList');
-        const posts = JSON.parse(localStorage.getItem('yrc_posts') || '[]');
-        list.innerHTML = posts.length === 0 ? '<p style="color:#999;">ยังไม่มีประกาศใหม่</p>' : '';
-        
-        posts.slice().reverse().forEach(p => {
-            const prof = JSON.parse(localStorage.getItem('profile_' + p.user) || '{}');
-            list.innerHTML += `
-                <div class="item-card">
-                    <span class="status-badge" style="background:${p.type==='found'?'#e10098':'#2f3542'}">${p.type==='found'?'เจอของ':'ของหาย'}</span>
-                    <b>${p.item}</b><br>
-                    <small>📍 ${p.loc} | 🕒 ${p.date}</small><br>
-                    <small style="color:var(--main-pink)">ติดต่อ: ${prof.name || p.user} ${prof.tel ? ' (โทร: '+prof.tel+')' : ''}</small>
-                </div>`;
-        });
-    }
-
-    function showHistory(type) {
-        const user = localStorage.getItem('currentUser');
-        const posts = JSON.parse(localStorage.getItem('yrc_posts') || '[]');
-        const myPosts = posts.filter(p => p.user === user && p.type === type);
-        
-        document.getElementById('histTitle').innerText = type === 'found' ? "📜 ประวัติที่ฉันแจ้งเจอ" : "🔍 ประวัติที่ฉันแจ้งหาย";
-        const hList = document.getElementById('histList');
-        hList.innerHTML = myPosts.length === 0 ? '<p>ไม่มีประวัติการแจ้ง</p>' : '';
-        
-        myPosts.forEach(p => {
-            hList.innerHTML += `
-                <div class="item-card">
-                    <b>${p.item}</b><br><small>📍 ${p.loc} [${p.date}]</small>
-                </div>`;
-        });
-        showSection('historyPage');
-    }
-
-    function saveProfileData() {
-        const user = localStorage.getItem('currentUser');
-        const data = {
-            name: document.getElementById('pName').value,
-            level: document.getElementById('pLevel').value,
-            room: document.getElementById('pRoom').value,
-            tel: document.getElementById('pTel').value,
-            ig: document.getElementById('pIG').value
-        };
-        localStorage.setItem('profile_' + user, JSON.stringify(data));
-        alert("บันทึกข้อมูลสำเร็จ");
-    }
-
-    function logout() { localStorage.removeItem('currentUser'); location.reload(); }
-    function openNav() { document.getElementById("mySidebar").style.width = "280px"; }
-    function closeNav() { document.getElementById("mySidebar").style.width = "0"; }
 </script>
 </body>
 </html>
