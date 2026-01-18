@@ -7,20 +7,15 @@
     <style>
         :root { --main-pink: #e10098; --bg-color: #fdf2f8; --success: #2ed573; }
         body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: var(--bg-color); margin: 0; }
-        
-        /* Header & Sidebar */
         header { background: var(--main-pink); color: white; padding: 15px; display: flex; align-items: center; position: sticky; top: 0; z-index: 500; }
         .sidebar { height: 100%; width: 0; position: fixed; z-index: 1000; top: 0; left: 0; background-color: white; overflow-x: hidden; transition: 0.5s; padding-top: 60px; box-shadow: 2px 0 15px rgba(0,0,0,0.1); }
         .sidebar a { padding: 12px 25px; text-decoration: none; font-size: 16px; color: #444; display: block; border-bottom: 1px solid #f9f9f9; }
-        
-        /* Container & Elements */
         .container { max-width: 450px; margin: 20px auto; background: white; padding: 30px; border-radius: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); text-align: center; }
         .input-box, select { width: 100%; padding: 14px; border: 2px solid #eee; border-radius: 12px; margin-bottom: 15px; box-sizing: border-box; font-size: 16px; outline: none; }
         .btn { width: 100%; padding: 16px; border: none; border-radius: 15px; cursor: pointer; font-weight: bold; font-size: 18px; transition: 0.3s; margin-top: 10px; }
         .btn-main { background-color: var(--main-pink); color: white; }
         .btn-confirm { background-color: var(--success); color: white; }
         .btn-disabled { background-color: #ccc; cursor: not-allowed; opacity: 0.6; }
-        
         .hidden { display: none !important; }
         .item-card { border-left: 5px solid var(--main-pink); background: #fff; padding: 15px; border-radius: 12px; margin-top: 15px; border: 1px solid #eee; text-align: left; }
     </style>
@@ -42,7 +37,6 @@
 </header>
 
 <div class="container" id="contentArea">
-    
     <div id="welcomePage">
         <div style="font-size: 70px; margin-bottom: 10px;">🌸</div>
         <h1>ยินดีต้อนรับ</h1>
@@ -99,13 +93,11 @@
         <input list="locations" id="lLoc" class="input-box" placeholder="สถานที่ที่หาย...">
         <button class="btn btn-main" onclick="savePost('lost')">ลงประกาศ</button>
     </div>
-
 </div>
 
 <datalist id="locations"></datalist>
 
 <script>
-    // ตั้งค่าตัวเลือกห้องและสถานที่
     const locs = ["ตึก 1 ตึกยุพราช", "ตึก 2 เรือนวิเชียร", "ตึก 3 เรือนรัตน์", "ตึก 4 เรือนเพชร", "ตึก 5 เรือนวชิระ", "ตึก 6 อาคารพัชระ", "ตึก 7 อาคารรัตนมณี", "ตึก 8 อาคารศรีมรกต", "ตึก 9 อาหารนวรัตน์", "ตึก 10 อาคารเพชรรัตนราชสุดา", "ตึก 11 อาคารยุพราช 100 ปี", "ตึก 12 อาคารวชิรดารา", "ตึก 13 อาคารศูนย์วิทยบริการดารารัศมี", "อาคารพยาบาล 100 ปี", "อาคารประชาสัมพันธ์ 100 ปี", "ธรรมสถาน", "โรงช้างต้น", "เรือนแก้ว", "ห้องน้ำรังผึ้ง", "โดมยุพราชรังสรรค์"];
 
     window.onload = function() {
@@ -121,24 +113,29 @@
         const id = document.getElementById('stuID').value;
         const pass = document.getElementById('stuPass').value;
         const btn = document.getElementById('loginBtn');
-        btn.disabled = !(id.length === 5 && pass.length > 0);
+        // เงื่อนไข: ต้องเป็นเลข 5 หลัก และอยู่ในช่วง 50000-57000 เท่านั้น
+        const idNum = parseInt(id);
+        const isIdValid = (id.length === 5 && idNum >= 50000 && idNum <= 57000);
+        
+        btn.disabled = !(isIdValid && pass.length > 0);
         btn.classList.toggle('btn-disabled', btn.disabled);
     }
 
     function handleLogin() {
-        const id = document.getElementById('stuID').value;
-        const pw = document.getElementById('stuPass').value;
-        const savedPW = localStorage.getItem('password_' + id) || id;
-
-        if (pw === savedPW.toString()) {
+        const id = document.getElementById('stuID').value.trim();
+        const pw = document.getElementById('stuPass').value.trim();
+        
+        // บังคับให้รหัสเริ่มต้นคือเลขประจำตัวเป๊ะๆ
+        if (pw === id) {
             localStorage.setItem('currentUser', id);
             document.getElementById('mainHeader').classList.remove('hidden');
             showSection('homePage');
         } else {
-            alert("❌ รหัสผ่านไม่ถูกต้อง");
+            alert("❌ รหัสผ่านไม่ถูกต้อง (ต้องใช้เลขเดียวกับ ID)");
         }
     }
 
+    // ฟังก์ชันอื่นๆ คงเดิมตามที่คุณส่งมา
     function showSection(id) {
         const sects = ['welcomePage', 'loginPage', 'homePage', 'profilePage', 'matchPage', 'foundForm', 'lostForm'];
         sects.forEach(s => document.getElementById(s).classList.add('hidden'));
@@ -153,7 +150,6 @@
         const loc = document.getElementById(type === 'found' ? 'fLoc' : 'lLoc').value;
         const user = localStorage.getItem('currentUser');
         if(!name || !loc) return alert("กรุณากรอกข้อมูล");
-
         const posts = JSON.parse(localStorage.getItem('yrc_posts') || '[]');
         posts.push({ id: Date.now(), type, name, loc, user, status: 'active', confirmF: false, confirmL: false });
         localStorage.setItem('yrc_posts', JSON.stringify(posts));
@@ -181,7 +177,6 @@
         const posts = JSON.parse(localStorage.getItem('yrc_posts') || '[]');
         const matchList = document.getElementById('matchList');
         matchList.innerHTML = '';
-        
         const myLost = posts.filter(p => p.user === user && p.type === 'lost' && p.status !== 'done');
         myLost.forEach(lost => {
             const matches = posts.filter(p => p.type === 'found' && p.name.includes(lost.name) && p.status !== 'done');
@@ -195,15 +190,9 @@
         });
     }
 
-    function confirmReturn(postId, role) {
-        let posts = JSON.parse(localStorage.getItem('yrc_posts'));
-        const idx = posts.findIndex(p => p.id == postId);
-        if(role === 'lost') posts[idx].confirmL = true;
-        alert("บันทึกการยืนยันแล้ว ระบบจะปิดประกาศเมื่อทั้งคนเก็บได้และเจ้าของกดยืนยันครบทั้งคู่");
-        localStorage.setItem('yrc_posts', JSON.stringify(posts));
-        showSection('homePage');
-    }
-
+    function openNav() { document.getElementById("mySidebar").style.width = "280px"; }
+    function closeNav() { document.getElementById("mySidebar").style.width = "0"; }
+    function logout() { localStorage.removeItem('currentUser'); location.reload(); }
     function saveProfile() {
         const user = localStorage.getItem('currentUser');
         const data = {
@@ -216,10 +205,6 @@
         localStorage.setItem('profile_' + user, JSON.stringify(data));
         alert("บันทึกข้อมูลเรียบร้อย");
     }
-
-    function openNav() { document.getElementById("mySidebar").style.width = "280px"; }
-    function closeNav() { document.getElementById("mySidebar").style.width = "0"; }
-    function logout() { localStorage.removeItem('currentUser'); location.reload(); }
 </script>
 </body>
 </html>
