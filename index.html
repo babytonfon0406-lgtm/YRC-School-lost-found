@@ -5,27 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YRC Lost & Found System</title>
     <style>
-        :root { --main-pink: #e10098; --light-pink: #fce4ec; --dark-pink: #c20084; --success: #2ed573; }
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: #fdf2f8; margin: 0; overflow-x: hidden; color: #333; }
-        
-        /* Navigation */
+        :root { --main-pink: #e10098; --light-pink: #fce4ec; --success: #2ed573; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: #fdf2f8; margin: 0; text-align: center; }
         .sidebar { height: 100%; width: 0; position: fixed; z-index: 1000; top: 0; left: 0; background-color: white; overflow-x: hidden; transition: 0.5s; padding-top: 60px; box-shadow: 2px 0 15px rgba(0,0,0,0.1); }
-        .sidebar a { padding: 12px 25px; text-decoration: none; font-size: 16px; color: #444; display: block; border-bottom: 1px solid #f9f9f9; }
+        .sidebar a { padding: 12px 25px; text-decoration: none; font-size: 16px; color: #444; display: block; text-align: left; }
         header { background: var(--main-pink); color: white; padding: 15px; display: flex; align-items: center; position: sticky; top: 0; z-index: 500; }
-        
-        /* Layout */
-        .container { max-width: 450px; margin: 20px auto; background: white; padding: 30px; border-radius: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); text-align: center; }
+        .container { max-width: 450px; margin: 20px auto; background: white; padding: 30px; border-radius: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
         .input-box, select { width: 100%; padding: 14px; border: 2px solid #eee; border-radius: 12px; margin-bottom: 15px; box-sizing: border-box; font-size: 16px; }
-        
-        /* Buttons */
-        .btn { width: 100%; padding: 15px; border: none; border-radius: 15px; cursor: pointer; font-weight: bold; font-size: 18px; margin-top: 10px; display: block; text-decoration: none; transition: 0.3s; }
+        .btn { width: 100%; padding: 15px; border: none; border-radius: 15px; cursor: pointer; font-weight: bold; font-size: 18px; margin-top: 10px; }
         .btn-main { background-color: var(--main-pink); color: white; }
-        .btn-dark { background-color: #2f3542; color: white; }
         .btn-disabled { opacity: 0.5; cursor: not-allowed; }
-        
         .hidden { display: none !important; }
-        .item-card { border-left: 5px solid var(--main-pink); background: #fff; padding: 15px; border-radius: 12px; margin-top: 15px; border: 1px solid #eee; text-align: left; }
-        .error-small { color: #ff4757; font-size: 12px; display: block; margin-top: -10px; margin-bottom: 10px; text-align: left; font-weight: bold; }
+        .error-text { color: red; font-size: 12px; display: block; text-align: left; margin-top: -10px; margin-bottom: 10px; font-weight: bold; }
+    </small>
     </style>
 </head>
 <body>
@@ -33,12 +25,8 @@
 <div id="mySidebar" class="sidebar">
     <span style="position:absolute;top:10px;right:25px;font-size:36px;cursor:pointer;" onclick="closeNav()">&times;</span>
     <a href="#" onclick="showSection('homePage')">🏠 หน้าหลัก</a>
-    <a href="#" onclick="showSection('profilePage')">👤 แก้ไขข้อมูลส่วนตัว / ติดต่อ</a>
-    <a href="#" onclick="showSection('passwordPage')">🔑 เปลี่ยนรหัสผ่าน</a>
-    <a href="#" onclick="showSection('matchPage')">🔔 ของที่มีคนเจอ (Matching)</a>
-    <a href="#" onclick="showHistory('found')">📜 ประวัติแจ้งเจอของ</a>
-    <a href="#" onclick="showHistory('lost')">🔍 ประวัติแจ้งของหาย</a>
-    <a href="#" onclick="logout()" style="color:red; border-top: 1px solid #eee; margin-top: 10px;">🚪 ออกจากระบบ</a>
+    <a href="#" onclick="showSection('profilePage')">👤 แก้ไขข้อมูลส่วนตัว</a>
+    <a href="#" onclick="logout()" style="color:red;">🚪 ออกจากระบบ</a>
 </div>
 
 <header id="mainHeader" class="hidden">
@@ -48,123 +36,63 @@
 
 <div class="container">
     <div id="welcomeSection">
-        <div style="font-size: 80px; margin-bottom: 20px;">🌸</div>
+        <div style="font-size: 60px;">🌸</div>
         <h1>ยินดีต้อนรับ</h1>
-        <p style="color: #666;">ระบบแจ้งของหายและตามหาของหาย<br>โรงเรียนยุพราชวิทยาลัย</p>
-        <button class="btn btn-main" onclick="showSection('loginSection')">เข้าสู่ระบบเพื่อใช้งาน</button>
+        <p>ระบบแจ้งของหาย โรงเรียนยุพราชวิทยาลัย</p>
+        <button class="btn btn-main" onclick="showSection('loginSection')">เข้าสู่ระบบ</button>
     </div>
 
     <div id="loginSection" class="hidden">
         <h1>Login</h1>
-        <div style="text-align: left; margin-top: 20px;">
-            <label style="font-weight: bold;">เลขประจำตัวนักเรียน</label>
-            <input type="number" id="loginID" class="input-box" placeholder="กรอกเลข 5 หลัก" oninput="validateLogin()">
-            <span id="idError" class="error-small"></span>
-
-            <label style="font-weight: bold;">รหัสผ่าน</label>
-            <input type="password" id="loginPass" class="input-box" placeholder="กรอกรหัสผ่าน" oninput="validateLogin()">
+        <div style="text-align: left;">
+            <label>เลขประจำตัวนักเรียน</label>
+            <input type="number" id="loginID" class="input-box" placeholder="กรอกเลข 5 หลัก" oninput="validate()">
+            <span id="idError" class="error-text"></span>
+            
+            <label>รหัสผ่าน</label>
+            <input type="password" id="loginPass" class="input-box" placeholder="กรอกรหัสผ่าน" oninput="validate()">
         </div>
-        <button id="loginBtn" class="btn btn-main btn-disabled" onclick="login()" disabled>เข้าสู่ระบบ</button>
-        <button class="btn" style="color: #999; font-size: 14px;" onclick="showSection('welcomeSection')">ย้อนกลับ</button>
+        <button id="loginBtn" class="btn btn-main btn-disabled" onclick="login()" disabled>ตกลง</button>
+        <button class="btn" style="color: #999;" onclick="showSection('welcomeSection')">ย้อนกลับ</button>
     </div>
 
     <div id="homePage" class="hidden">
-        <button class="btn btn-main" style="height: 90px; font-size: 20px;" onclick="showSection('foundPage')">🤝 เจอของหาย (แจ้งพบ)</button>
-        <button class="btn btn-dark" style="height: 90px; font-size: 20px; margin-top: 15px;" onclick="showSection('lostPage')">🔍 ตามหาของหาย (แจ้งหาย)</button>
-        <h3 style="text-align: left; margin-top: 40px; border-bottom: 2px solid var(--main-pink); padding-bottom: 5px;">รายการล่าสุด</h3>
-        <div id="globalList"></div>
+        <button class="btn btn-main" style="height: 80px;" onclick="showSection('foundPage')">🤝 เจอของหาย</button>
+        <button class="btn" style="background: #2f3542; color: white; height: 80px;" onclick="showSection('lostPage')">🔍 ตามหาของ</button>
+        <div id="globalList" style="margin-top: 20px;"></div>
     </div>
-
+    
     <div id="profilePage" class="hidden">
-        <h2>👤 แก้ไขข้อมูลส่วนตัว</h2>
+        <h2>แก้ไขข้อมูลส่วนตัว</h2>
         <input type="text" id="profName" class="input-box" placeholder="ชื่อ-นามสกุล">
         <div style="display:flex; gap:10px;">
             <select id="profLevel" class="input-box"></select>
             <select id="profRoom" class="input-box"></select>
         </div>
-        <select id="profNo" class="input-box"></select>
-        <input type="tel" id="profTel" class="input-box" placeholder="เบอร์โทรติดต่อ">
-        <input type="text" id="profIG" class="input-box" placeholder="Instagram (ถ้ามี)">
-        <button class="btn btn-main" onclick="saveProfile()">บันทึกข้อมูล</button>
-        <button class="btn btn-dark" onclick="showSection('homePage')">กลับ</button>
-    </div>
-
-    <div id="passwordPage" class="hidden">
-        <h2>🔑 เปลี่ยนรหัสผ่าน</h2>
-        <input type="password" id="oldPass" class="input-box" placeholder="รหัสผ่านเดิม">
-        <input type="password" id="newPass" class="input-box" placeholder="รหัสผ่านใหม่ (5 หลักขึ้นไป)">
-        <button class="btn btn-main" onclick="changePassword()">บันทึกรหัสใหม่</button>
-        <button class="btn btn-dark" onclick="showSection('homePage')">กลับ</button>
-    </div>
-
-    <div id="foundPage" class="hidden">
-        <h2>🤝 แจ้งพบของหาย</h2>
-        <input type="text" id="foundName" class="input-box" placeholder="เจอของอะไร...">
-        <input list="locations" id="foundLoc" class="input-box" placeholder="เจอที่ตึกไหน...">
-        <select id="foundFloor" class="input-box"><option value="1">ชั้น 1</option><option value="2">ชั้น 2</option><option value="3">ชั้น 3</option><option value="4">ชั้น 4</option></select>
-        <button class="btn btn-main" onclick="savePost('found')">ลงประกาศ</button>
-        <button class="btn btn-dark" onclick="showSection('homePage')">ยกเลิก</button>
-    </div>
-
-    <div id="lostPage" class="hidden">
-        <h2>🔍 แจ้งของหาย</h2>
-        <input type="text" id="lostName" class="input-box" placeholder="อะไรหาย...">
-        <input list="locations" id="lostLoc" class="input-box" placeholder="สถานที่ที่คาดว่าหาย...">
-        <button class="btn btn-main" onclick="savePost('lost')">ลงประกาศตามหา</button>
-        <button class="btn btn-dark" onclick="showSection('homePage')">ยกเลิก</button>
-    </div>
-
-    <div id="matchPage" class="hidden">
-        <h2>🔔 ของที่มีคนเจอ (Matching)</h2>
-        <div id="matchList"></div>
-        <button class="btn btn-dark" onclick="showSection('homePage')">กลับ</button>
-    </div>
-
-    <div id="historyPage" class="hidden">
-        <h2 id="historyTitle">ประวัติ</h2>
-        <div id="historyList"></div>
-        <button class="btn btn-dark" onclick="showSection('homePage')">กลับ</button>
+        <button class="btn btn-main" onclick="saveProfile()">บันทึก</button>
     </div>
 </div>
 
-<datalist id="locations"></datalist>
-
 <script>
-    const locs = ["ตึก 1 ตึกยุพราช", "ตึก 2 เรือนวิเชียร", "ตึก 3 เรือนรัตน์", "ตึก 4 เรือนเพชร", "ตึก 5 เรือนวชิระ", "ตึก 6 อาคารพัชระ", "ตึก 7 อาคารรัตนมณี", "ตึก 8 อาคารศรีมรกต", "ตึก 9 อาหารนวรัตน์", "ตึก 10 อาคารเพชรรัตนราชสุดา", "ตึก 11 อาคารยุพราช 100 ปี", "ตึก 12 อาคารวชิรดารา", "ตึก 13 อาคารศูนย์วิทยบริการดารารัศมี", "อาคารพยาบาล 100 ปี", "อาคารประชาสัมพันธ์ 100 ปี", "ธรรมสถาน", "โรงช้างต้น", "เรือนแก้ว", "ห้องน้ำรังผึ้ง", "สวนบ้านบานเย็น", "โดมยุพราชรังสรรค์", "โดมอาคาร 2", "โดมอาคาร 5", "โดมอาคาร 7-8"];
-
+    // ตั้งค่าตัวเลือกห้องและชั้น
     window.onload = function() {
         const lv = document.getElementById('profLevel');
         for(let i=1; i<=6; i++) lv.innerHTML += `<option value="ม.${i}">ม.${i}</option>`;
         const rm = document.getElementById('profRoom');
         for(let i=1; i<=17; i++) rm.innerHTML += `<option value="${i}">ห้อง ${i}</option>`;
-        const no = document.getElementById('profNo');
-        for(let i=1; i<=45; i++) no.innerHTML += `<option value="${i}">เลขที่ ${i}</option>`;
-        const dl = document.getElementById('locations');
-        locs.forEach(l => dl.innerHTML += `<option value="${l}">`);
     };
 
-    function validateLogin() {
-        const idInput = document.getElementById('loginID');
-        const passInput = document.getElementById('loginPass');
-        const btn = document.getElementById('loginBtn');
+    function validate() {
+        const id = document.getElementById('loginID').value;
+        const pass = document.getElementById('loginPass').value;
         const err = document.getElementById('idError');
-        const idVal = parseInt(idInput.value);
+        const btn = document.getElementById('loginBtn');
         
-        let isValid = (idInput.value.length === 5 && idVal >= 50000 && idVal <= 57000);
+        let valid = (id.length === 5 && id >= 50000 && id <= 57000);
+        err.innerText = (id.length > 0 && !valid) ? "เลขไม่ถูกต้อง" : "";
         
-        if (idInput.value.length > 0 && !isValid) {
-            err.innerText = "เลขประจำตัวไม่ถูกต้อง";
-        } else {
-            err.innerText = "";
-        }
-
-        if (isValid && passInput.value.length > 0) {
-            btn.disabled = false;
-            btn.classList.remove('btn-disabled');
-        } else {
-            btn.disabled = true;
-            btn.classList.add('btn-disabled');
-        }
+        btn.disabled = !(valid && pass.length > 0);
+        btn.className = btn.disabled ? "btn btn-main btn-disabled" : "btn btn-main";
     }
 
     function login() {
@@ -175,65 +103,22 @@
         if (pw === storedPW) {
             localStorage.setItem('currentUser', id);
             document.getElementById('mainHeader').classList.remove('hidden');
-            document.getElementById('sideUserName').innerText = "รหัสนักเรียน: " + id;
             showSection('homePage');
         } else {
-            alert("❌ รหัสผ่านไม่ถูกต้อง");
+            alert("รหัสผ่านไม่ถูกต้อง");
         }
     }
 
     function showSection(id) {
-        const all = ['welcomeSection', 'loginSection', 'homePage', 'profilePage', 'passwordPage', 'matchPage', 'foundPage', 'lostPage', 'historyPage'];
-        all.forEach(s => document.getElementById(s).classList.add('hidden'));
+        const sects = ['welcomeSection', 'loginSection', 'homePage', 'profilePage'];
+        sects.forEach(s => document.getElementById(s).classList.add('hidden'));
         document.getElementById(id).classList.remove('hidden');
-        if(id === 'homePage') displayGlobal();
         closeNav();
-    }
-
-    function savePost(type) {
-        const name = document.getElementById(type+'Name').value;
-        const loc = document.getElementById(type+'Loc').value;
-        const user = localStorage.getItem('currentUser');
-        if(!name || !loc) return alert("กรุณากรอกข้อมูลให้ครบ");
-        const posts = JSON.parse(localStorage.getItem('yrcPosts')) || [];
-        posts.push({ id: Date.now(), type, name, loc, user, status: 'active', date: new Date().toLocaleString('th-TH') });
-        localStorage.setItem('yrcPosts', JSON.stringify(posts));
-        alert("ลงประกาศเรียบร้อย");
-        showSection('homePage');
-    }
-
-    function displayGlobal() {
-        const list = document.getElementById('globalList');
-        const posts = JSON.parse(localStorage.getItem('yrcPosts')) || [];
-        list.innerHTML = posts.length === 0 ? '<p style="color:#999; text-align:center;">ยังไม่มีประกาศใหม่</p>' : '';
-        posts.slice().reverse().forEach(p => {
-            const prof = JSON.parse(localStorage.getItem('profile_' + p.user)) || {};
-            list.innerHTML += `<div class="item-card">
-                <span style="background:${p.type==='found'?'#e10098':'#2f3542'}; color:white; padding:2px 6px; border-radius:5px; font-size:11px;">${p.type==='found'?'แจ้งพบ':'แจ้งหาย'}</span>
-                <b> ${p.name}</b><br>📍 ${p.loc}<br>
-                <small style="color:#666;">ติดต่อ: ${prof.tel || p.user} ${prof.ig ? '| IG: '+prof.ig : ''}</small>
-            </div>`;
-        });
     }
 
     function openNav() { document.getElementById("mySidebar").style.width = "280px"; }
     function closeNav() { document.getElementById("mySidebar").style.width = "0"; }
     function logout() { localStorage.removeItem('currentUser'); location.reload(); }
-    
-    // ฟังก์ชันย่อยอื่นๆ (Profile/Password) ทำงานเหมือนเดิมแต่ปรับ string
-    function saveProfile() {
-        const user = localStorage.getItem('currentUser');
-        const data = { 
-            name: document.getElementById('profName').value,
-            level: document.getElementById('profLevel').value,
-            room: document.getElementById('profRoom').value,
-            no: document.getElementById('profNo').value,
-            tel: document.getElementById('profTel').value,
-            ig: document.getElementById('profIG').value
-        };
-        localStorage.setItem('profile_' + user, JSON.stringify(data));
-        alert("บันทึกข้อมูลเรียบร้อย");
-    }
 </script>
 </body>
 </html>
