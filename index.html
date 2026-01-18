@@ -3,113 +3,172 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YRC Lost & Found - Local System</title>
+    <title>YRC Lost & Found - Pink Edition</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; margin: 0; padding: 20px; color: #333; }
-        .container { max-width: 500px; margin: auto; background: white; padding: 25px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-        h1 { color: #2d3436; text-align: center; font-size: 24px; }
-        .form-group { margin-bottom: 15px; }
-        input, select { width: 100%; padding: 12px; border: 1px solid #dfe6e9; border-radius: 8px; box-sizing: border-box; }
-        .btn { width: 100%; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; margin-top: 10px; }
-        .btn-save { background-color: #00b894; color: white; }
-        .btn-save:hover { background-color: #00a383; }
+        :root {
+            --main-pink: #e10098; /* สีชมพูบานเย็น */
+            --light-pink: #fce4ec;
+        }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: var(--light-pink); margin: 0; padding: 20px; }
+        .container { max-width: 500px; margin: auto; background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 25px rgba(225,0,152,0.2); }
+        h1 { color: var(--main-pink); text-align: center; margin-bottom: 20px; }
         
-        .item-list { margin-top: 30px; }
-        .item-card { background: #fff; border: 1px solid #eee; padding: 15px; border-radius: 10px; margin-bottom: 15px; position: relative; }
-        .status-badge { display: inline-block; padding: 4px 8px; border-radius: 5px; font-size: 12px; font-weight: bold; margin-bottom: 10px; }
-        .status-waiting { background: #ffeaa7; color: #d63031; }
-        .status-returned { background: #55efc4; color: #00b894; text-decoration: line-through; }
-        .btn-return { background: #0984e3; color: white; padding: 5px 10px; border-radius: 5px; border: none; font-size: 12px; }
+        /* สไตล์ Login */
+        #loginPage { text-align: center; }
+        .input-box { width: 100%; padding: 12px; border: 2px solid #eee; border-radius: 10px; margin-bottom: 10px; box-sizing: border-box; }
+        .input-box:focus { border-color: var(--main-pink); outline: none; }
+        
+        /* สไตล์ปุ่ม */
+        .btn { width: 100%; padding: 15px; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 16px; transition: 0.3s; margin-top: 10px; }
+        .btn-pink { background-color: var(--main-pink); color: white; }
+        .btn-pink:hover { opacity: 0.9; transform: scale(0.98); }
+        
+        /* รายการของ */
+        .item-card { border-left: 5px solid var(--main-pink); background: #fff; padding: 15px; border-radius: 10px; margin-top: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); position: relative; }
+        .search-box { background: #fff; padding: 10px; border-radius: 10px; margin-bottom: 20px; border: 1px solid var(--main-pink); }
+        
+        .hidden { display: none; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>🔍 YRC Lost & Found</h1>
-    
-    <div class="form-group">
-        <input type="text" id="itemName" placeholder="ของที่พบ (เช่น หูฟัง, กุญแจ)">
-    </div>
-    <div class="form-group">
-        <input type="text" id="itemLoc" placeholder="พบที่ไหน (เช่น โรงอาหาร, ตึก 3)">
-    </div>
-    <button class="btn btn-save" onclick="addItem()">➕ บันทึกข้อมูลการพบ</button>
+    <h1>🌸 YRC Lost & Found</h1>
 
-    <hr style="margin: 30px 0; border: 0; border-top: 1px solid #eee;">
+    <div id="loginSection">
+        <p style="text-align:center; color: #666;">กรุณาเข้าสู่ระบบด้วยรหัสนักเรียน</p>
+        <input type="number" id="stdID" class="input-box" placeholder="เลขประจำตัวนักเรียน">
+        <input type="password" id="stdPass" class="input-box" placeholder="รหัสผ่าน">
+        <button class="btn btn-pink" onclick="login()">เข้าสู่ระบบ</button>
+    </div>
 
-    <div class="item-list" id="itemList">
-        <h3>รายการที่บันทึกไว้</h3>
+    <div id="mainSection" class="hidden">
+        <div style="display:flex; justify-content: space-between; align-items: center;">
+            <span id="userDisplay" style="font-weight:bold; color: var(--main-pink);"></span>
+            <button onclick="logout()" style="background:none; border:none; color:red; cursor:pointer;">ออกจากระบบ</button>
         </div>
+        
+        <hr>
+
+        <div id="formArea">
+            <h3>📢 แจ้งพบของหาย</h3>
+            <input type="text" id="itemName" class="input-box" placeholder="เจออะไร? (เช่น กระเป๋าตังค์)">
+            
+            <label style="font-size:12px;">เลือกสถานที่ (พิมพ์ค้นหาได้):</label>
+            <input list="locations" id="itemLoc" class="input-box" placeholder="เลือกตึก/อาคาร..." onchange="updateFloors()">
+            <datalist id="locations">
+                </datalist>
+
+            <select id="itemFloor" class="input-box">
+                <option value="">เลือกชั้น...</option>
+            </select>
+
+            <button class="btn btn-pink" onclick="addItem()">บันทึกข้อมูล</button>
+        </div>
+
+        <hr>
+
+        <input type="text" id="searchBar" class="search-box" style="width:100%; box-sizing:border-box;" placeholder="🔍 ค้นหาของที่นี่..." onkeyup="searchItem()">
+        
+        <div id="itemList">
+            </div>
+    </div>
 </div>
 
 <script>
-    // 1. ฟังก์ชันโหลดข้อมูลจากหน่วยความจำเครื่องมาแสดง
-    function displayItems() {
-        const list = document.getElementById('itemList');
-        const items = JSON.parse(localStorage.getItem('lostItems')) || [];
-        
-        // ล้างข้อมูลหน้าจอเก่าก่อน
-        list.innerHTML = '<h3>รายการที่บันทึกไว้</h3>';
-        
-        items.forEach((item, index) => {
-            const card = document.createElement('div');
-            card.className = 'item-card';
-            const statusClass = item.returned ? 'status-returned' : 'status-waiting';
-            const statusText = item.returned ? 'คืนเรียบร้อยแล้ว' : 'รอเจ้าของมารับ';
-            
-            card.innerHTML = `
-                <span class="status-badge ${statusClass}">${statusText}</span>
-                <div style="font-weight:bold; font-size:18px;">${item.name}</div>
-                <div style="font-size:14px; color:#636e72;">สถานที่: ${item.location}</div>
-                ${!item.returned ? `<button class="btn-return" onclick="markAsReturned(${index})" style="margin-top:10px;">✅ ยืนยันว่าคืนแล้ว</button>` : ''}
-                <button onclick="deleteItem(${index})" style="background:none; border:none; color:#ff7675; cursor:pointer; font-size:12px; margin-left:10px;">ลบออก</button>
-            `;
-            list.appendChild(card);
-        });
-    }
+    const locationsData = [
+        "ตึก 1 ตึกยุพราช", "ตึก 2 เรือนวิเชียร", "ตึก 3 เรือนรัตน์", "ตึก 4 เรือนเพชร", 
+        "ตึก 5 เรือนวชิระ", "ตึก 6 อาคารพัชระ", "ตึก 7 อาคารรัตนมณี", "ตึก 8 อาคารศรีมรกต", 
+        "ตึก 9 อาหารนวรัตน์", "ตึก 10 อาคารเพชรรัตนราชสุดา", "ตึก 11 อาคารยุพราช 100 ปี", 
+        "ตึก 12 อาคารวชิรดารา", "ตึก 13 อาคารศูนย์วิทยบริการดารารัศมี", "อาคารพยาบาล 100 ปี",
+        "อาคารประชาสัมพันธ์ 100 ปี", "ธรรมสถาน", "อาคารดนตรีไทย", "โรงช้างต้น", "เรือนแก้ว",
+        "อาคารสมาคมผู้ปกครองและครูยุพราชวิทยาลัย (สปย.)", "ศูนย์ประชาสัมพันธ์ โรงเรียนยุพราชวิทยาลัย",
+        "ห้องน้ำรังผึ้ง", "สวนบ้านบานเย็น", "โดมยุพราชรังสรรค์", "โดมอาคาร 2", "โดมอาคาร 5", "โดมอาคาร 7-8"
+    ];
 
-    // 2. ฟังก์ชันเพิ่มข้อมูลใหม่
-    function addItem() {
-        const name = document.getElementById('itemName').value;
-        const location = document.getElementById('itemLoc').value;
+    // โหลดรายชื่อตึกเข้า Datalist
+    const datalist = document.getElementById('locations');
+    locationsData.forEach(loc => {
+        let opt = document.createElement('option');
+        opt.value = loc;
+        datalist.appendChild(opt);
+    });
+
+    // อัปเดตจำนวนชั้นตามตึกที่เลือก
+    function updateFloors() {
+        const loc = document.getElementById('itemLoc').value;
+        const floorSelect = document.getElementById('itemFloor');
+        floorSelect.innerHTML = '<option value="">เลือกชั้น...</option>';
         
-        if (name === '' || location === '') {
-            alert('กรุณากรอกข้อมูลให้ครบถ้วน');
-            return;
+        let maxFloor = 0;
+        if (["ตึก 1 ตึกยุพราช", "ตึก 6 อาคารพัชระ", "ตึก 9 อาหารนวรัตน์", "ตึก 11 อาคารยุพราช 100 ปี"].includes(loc)) {
+            maxFloor = 2;
+        } else if (loc.includes("ตึก")) {
+            maxFloor = 4;
+        } else {
+            maxFloor = 1; // สถานที่อื่นๆ ให้มีชั้นเดียว
         }
 
-        const items = JSON.parse(localStorage.getItem('lostItems')) || [];
-        items.push({ name, location, returned: false });
-        
-        localStorage.setItem('lostItems', JSON.stringify(items));
-        
-        // ล้างค่าในช่องกรอก
-        document.getElementById('itemName').value = '';
-        document.getElementById('itemLoc').value = '';
-        
-        displayItems(); // อัปเดตการแสดงผล
+        for (let i = 1; i <= maxFloor; i++) {
+            floorSelect.innerHTML += `<option value="${i}">ชั้น ${i}</option>`;
+        }
     }
 
-    // 3. ฟังก์ชันกดยืนยันว่าคืนแล้ว
-    function markAsReturned(index) {
-        const items = JSON.parse(localStorage.getItem('lostItems'));
-        items[index].returned = true;
-        localStorage.setItem('lostItems', JSON.stringify(items));
+    function login() {
+        const id = document.getElementById('stdID').value;
+        const pass = document.getElementById('stdPass').value;
+        if (id && pass) {
+            document.getElementById('loginSection').classList.add('hidden');
+            document.getElementById('mainSection').classList.remove('hidden');
+            document.getElementById('userDisplay').innerText = "ผู้ใช้งาน: " + id;
+            displayItems();
+        } else {
+            alert("กรุณากรอกข้อมูลให้ครบ");
+        }
+    }
+
+    function logout() {
+        document.getElementById('loginSection').classList.remove('hidden');
+        document.getElementById('mainSection').classList.add('hidden');
+    }
+
+    function addItem() {
+        const name = document.getElementById('itemName').value;
+        const loc = document.getElementById('itemLoc').value;
+        const floor = document.getElementById('itemFloor').value;
+        
+        if (!name || !loc || !floor) return alert("กรุณากรอกให้ครบ");
+
+        const items = JSON.parse(localStorage.getItem('yrcItems')) || [];
+        items.push({ name, loc, floor, user: document.getElementById('stdID').value, date: new Date().toLocaleDateString() });
+        localStorage.setItem('yrcItems', JSON.stringify(items));
+        
+        document.getElementById('itemName').value = '';
         displayItems();
     }
 
-    // 4. ฟังก์ชันลบข้อมูล
-    function deleteItem(index) {
-        if(confirm('ต้องการลบข้อมูลนี้ใช่หรือไม่?')) {
-            const items = JSON.parse(localStorage.getItem('lostItems'));
-            items.splice(index, 1);
-            localStorage.setItem('lostItems', JSON.stringify(items));
-            displayItems();
-        }
+    function displayItems() {
+        const list = document.getElementById('itemList');
+        const items = JSON.parse(localStorage.getItem('yrcItems')) || [];
+        list.innerHTML = '';
+        items.reverse().forEach((item, index) => {
+            list.innerHTML += `
+                <div class="item-card">
+                    <b style="font-size:18px; color:var(--main-pink);">${item.name}</b><br>
+                    📍 ${item.loc} | ชั้น ${item.floor}<br>
+                    <small style="color:#999;">ผู้แจ้ง: ${item.user} | ${item.date}</small>
+                </div>
+            `;
+        });
     }
 
-    // เรียกใช้งานฟังก์ชันแสดงผลทันทีที่เปิดเว็บ
-    displayItems();
+    function searchItem() {
+        const query = document.getElementById('searchBar').value.toLowerCase();
+        const cards = document.getElementsByClassName('item-card');
+        for (let card of cards) {
+            card.style.display = card.innerText.toLowerCase().includes(query) ? 'block' : 'none';
+        }
+    }
 </script>
 
 </body>
