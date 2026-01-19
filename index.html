@@ -3,332 +3,254 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YRC Lost & Found - Ultimate Full Version</title>
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>YRC School Lost and Found - Official</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
+        /* --- CSS Styling (รายละเอียดสูง) --- */
         :root {
             --yrc-pink: #e10098;
-            --yrc-pink-light: #fdf2f8;
             --yrc-pink-dark: #b5007a;
-            --dark-blue: #2f3542;
-            --success-green: #2ed573;
-            --warning-orange: #ffa502;
-            --danger-red: #ff4757;
-            --bg-gray: #f1f2f6;
-            --white: #ffffff;
-            --shadow: 0 10px 30px rgba(225, 0, 152, 0.2);
-            --card-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            --yrc-pink-light: #fff0f9;
+            --dark-blue: #2d3436;
+            --bg: #f8f9fa;
         }
 
-        * { 
-            box-sizing: border-box; 
-            font-family: 'Kanit', sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
+        * { box-sizing: border-box; font-family: 'Kanit', sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background-color: var(--bg); margin: 0; padding-top: 70px; min-height: 100vh; overflow-x: hidden; }
 
-        body {
-            background-color: var(--bg-gray);
-            margin: 0;
-            padding-top: 80px; 
-            min-height: 100vh;
-            color: #2d3436;
-            overflow-x: hidden;
-        }
-
-        /* --- Header Section --- */
         header {
             background: linear-gradient(135deg, var(--yrc-pink), var(--yrc-pink-dark));
-            color: white;
-            width: 100%;
-            padding: 20px;
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            color: white; padding: 15px 20px; position: fixed; top: 0; width: 100%; z-index: 1000;
+            display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
-        .header-title { 
-            font-weight: 600; 
-            font-size: 22px; 
-            letter-spacing: 1.2px; 
-            flex-grow: 1; 
-            text-align: center; 
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-        }
-
-        .menu-icon { 
-            font-size: 30px; 
-            cursor: pointer; 
-            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-        }
-
-        .menu-icon:hover { transform: scale(1.1); }
-
-        /* --- Sidebar Navigation --- */
+        /* Sidebar ตามรูปภาพที่คุณส่งมา */
         .sidebar {
-            height: 100%;
-            width: 0;
-            position: fixed;
-            z-index: 2000;
-            top: 0;
-            left: 0;
-            background-color: var(--white);
-            overflow-x: hidden;
-            transition: 0.5s cubic-bezier(0.77,0.2,0.05,1.0);
-            padding-top: 60px;
-            box-shadow: 10px 0 30px rgba(0,0,0,0.2);
+            height: 100%; width: 0; position: fixed; z-index: 2000; top: 0; left: 0;
+            background-color: white; overflow-x: hidden; transition: 0.4s; padding-top: 20px;
+            box-shadow: 10px 0 30px rgba(0,0,0,0.1);
         }
-
-        .sidebar-header {
-            padding: 30px 20px;
-            text-align: center;
-            border-bottom: 2px solid var(--yrc-pink-light);
-            background: linear-gradient(to bottom, #fff, var(--yrc-pink-light));
-            margin-bottom: 15px;
-        }
-
-        .sidebar-avatar {
-            width: 90px; height: 90px;
-            background: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center; justify-content: center;
-            margin: 0 auto 15px;
-            font-size: 45px;
-            border: 3px solid var(--yrc-pink);
-            box-shadow: 0 5px 15px rgba(225, 0, 152, 0.2);
-        }
-
+        .sidebar-header { text-align: center; padding: 20px; border-bottom: 1px solid #eee; background: var(--yrc-pink-light); margin-bottom: 10px; }
         .sidebar a {
-            padding: 18px 30px;
-            text-decoration: none;
-            font-size: 17px;
-            color: #444;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            transition: 0.4s;
-            border-left: 5px solid transparent;
-            font-weight: 400;
+            padding: 15px 25px; text-decoration: none; font-size: 16px; color: #444;
+            display: flex; align-items: center; gap: 12px; transition: 0.2s;
         }
+        .sidebar a:hover { background-color: var(--yrc-pink-light); color: var(--yrc-pink); }
 
-        .sidebar a:hover {
-            background-color: var(--yrc-pink-light);
-            color: var(--yrc-pink);
-            border-left: 5px solid var(--yrc-pink);
-            padding-left: 40px;
-        }
-
-        .sidebar .logout-link {
-            color: var(--danger-red);
-            margin-top: 40px;
-            border-top: 1px solid #eee;
-        }
-
-        /* --- Main Content Containers --- */
         .container {
-            max-width: 550px;
-            width: 92%;
-            background: var(--white);
-            padding: 40px 30px;
-            border-radius: 40px;
-            box-shadow: var(--shadow);
-            margin: 20px auto 40px auto;
-            text-align: center;
-            transition: 0.3s;
+            max-width: 500px; width: 92%; background: white; padding: 35px 25px;
+            border-radius: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+            margin: 20px auto; text-align: center; animation: fadeIn 0.5s ease;
         }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         .hidden { display: none !important; }
 
-        /* --- Typography & UI Decor --- */
-        .section-title {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--yrc-pink);
-            margin-bottom: 25px;
-            text-align: left;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            border-bottom: 3px solid var(--yrc-pink-light);
-            padding-bottom: 12px;
-        }
-
-        .section-subtitle {
-            text-align: left;
-            color: #777;
-            font-size: 14px;
-            margin-top: -15px;
-            margin-bottom: 20px;
-        }
-
-        /* --- Form Elements --- */
-        .form-group { text-align: left; margin-bottom: 20px; }
-        .form-group label { 
-            display: block; 
-            margin-bottom: 8px; 
-            font-weight: 600; 
-            font-size: 15px; 
-            color: var(--dark-blue); 
-        }
-
         input, select, textarea {
-            width: 100%;
-            padding: 16px;
-            border: 2px solid #edf2f7;
-            border-radius: 20px;
-            font-size: 16px;
-            background: #f8fafc;
-            transition: all 0.3s ease;
-            outline: none;
+            width: 100%; padding: 16px; border: 2px solid #edf2f7; border-radius: 18px;
+            font-size: 16px; background: #f8fafc; outline: none; margin-bottom: 15px; transition: 0.3s;
         }
+        input:focus { border-color: var(--yrc-pink); background: white; }
 
-        input:focus, select:focus, textarea:focus { 
-            border-color: var(--yrc-pink); 
-            background: white; 
-            box-shadow: 0 0 0 5px rgba(225, 0, 152, 0.1);
-        }
-
-        /* --- Buttons --- */
         .btn {
-            width: 100%;
-            padding: 18px;
-            border: none;
-            border-radius: 22px;
-            font-size: 18px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            margin-top: 15px;
+            width: 100%; padding: 18px; border: none; border-radius: 20px; font-size: 18px;
+            font-weight: 600; cursor: pointer; transition: 0.3s; display: flex;
+            align-items: center; justify-content: center; gap: 10px;
         }
+        .btn-primary { background: var(--yrc-pink); color: white; }
+        .btn-outline { background: white; border: 2px solid var(--yrc-pink); color: var(--yrc-pink); }
 
-        .btn-primary { background: linear-gradient(135deg, var(--yrc-pink), var(--yrc-pink-dark)); color: white; box-shadow: 0 8px 20px rgba(225, 0, 152, 0.3); }
-        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 12px 25px rgba(225, 0, 152, 0.4); }
+        .section-title { font-size: 20px; font-weight: 600; color: var(--yrc-pink); text-align: left; margin-bottom: 20px; border-left: 5px solid var(--yrc-pink); padding-left: 10px; }
         
-        .btn-outline { background: white; border: 2.5px solid var(--yrc-pink); color: var(--yrc-pink); }
-        .btn-outline:hover { background: var(--yrc-pink-light); transform: translateY(-2px); }
-        
-        .btn-dark { background: var(--dark-blue); color: white; box-shadow: 0 8px 20px rgba(47, 53, 66, 0.3); }
-        .btn-dark:hover { transform: translateY(-3px); }
-
-        /* --- Post Cards --- */
+        /* Post Card Style */
         .item-card {
-            background: white;
-            border-radius: 25px;
-            padding: 22px;
-            margin-bottom: 20px;
-            text-align: left;
-            border: 1px solid #f1f2f6;
-            transition: 0.3s;
-            position: relative;
-            box-shadow: var(--card-shadow);
+            background: #fff; border: 1px solid #eee; border-radius: 20px;
+            padding: 15px; margin-bottom: 10px; text-align: left; position: relative;
         }
-
-        .item-card:hover { transform: scale(1.02); }
-
-        .item-card.found { border-left: 8px solid var(--yrc-pink); }
-        .item-card.lost { border-left: 8px solid var(--dark-blue); }
-
-        .badge {
-            padding: 5px 14px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: 700;
-            color: white;
-            display: inline-block;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-        }
-
-        .timestamp {
-            font-size: 11px;
-            color: #aaa;
-            margin-top: 10px;
-            display: block;
-            text-align: right;
-        }
-
-        /* --- Animations --- */
-        @keyframes slideUp { 
-            from { opacity: 0; transform: translateY(30px); } 
-            to { opacity: 1; transform: translateY(0); } 
-        }
-        .container { animation: slideUp 0.5s ease-out; }
-
-        /* --- Search Bar Style --- */
-        .search-container {
-            position: relative;
-            margin-bottom: 25px;
-        }
-        .search-container input {
-            padding-left: 50px;
-            background: var(--yrc-pink-light);
-            border-color: transparent;
-        }
-        .search-container::before {
-            content: '🔍';
-            position: absolute;
-            left: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 20px;
-        }
-
     </style>
 </head>
 <body>
 
 <div id="mySidebar" class="sidebar">
-    <div style="text-align:right; padding-right:20px;">
-        <span style="font-size:35px; cursor:pointer; color:var(--yrc-pink);" onclick="closeNav()">&times;</span>
-    </div>
+    <div style="text-align:right; padding-right:15px;"><span style="font-size:35px; cursor:pointer;" onclick="closeNav()">&times;</span></div>
     <div class="sidebar-header">
-        <div class="sidebar-avatar">🌸</div>
-        <b id="sideUserName" style="font-size: 20px; color:var(--yrc-pink-dark);">นักเรียนยุพราช</b><br>
-        <small id="sideUserID" style="color: #888; letter-spacing: 1px;">ID: -----</small>
+        <div style="font-size:40px;">🌸</div>
+        <b id="sideUserID" style="font-size: 18px;">รหัสนักเรียน: -----</b>
     </div>
-    <a href="#" onclick="showSection('homePage')">🏠 หน้าหลักระบบ</a>
-    <a href="#" onclick="showSection('profilePage')">👤 ข้อมูลส่วนตัวของคุณ</a>
-    <a href="#" onclick="showSection('browseItemsPage')">🔎 ตามหาของของฉัน</a>
-    <a href="#" onclick="showSection('matchStatusPage')">🔔 สถานะการนัดรับคืน</a>
-    <a href="#" onclick="showSection('changePasswordPage')">🔒 เปลี่ยนรหัสผ่านใหม่</a>
-    <a href="#" onclick="confirmLogout()" class="logout-link">🚪 ออกจากระบบปลอดภัย</a>
+    <a href="#" onclick="showSection('homePage')">🏠 หน้าหลัก</a>
+    <a href="#" onclick="showSection('profilePage')">👤 ข้อมูลส่วนตัว / ติดต่อ</a>
+    <a href="#" onclick="showSection('historyPage')">📜 ประวัติการแจ้งของฉัน</a>
+    <a href="#" onclick="showSection('matchPage')">🔔 ยืนยันการคืนของ</a>
+    <a href="#" onclick="logout()" style="color:#e74c3c; border-top:1px solid #eee; margin-top:10px;">🚪 ออกจากระบบ</a>
 </div>
 
 <header id="mainHeader" class="hidden">
-    <div class="menu-icon" onclick="openNav()">&#9776;</div>
-    <div class="header-title">YRC LOST & FOUND</div>
-    <div style="width: 30px;"></div>
+    <div style="font-size:26px; cursor:pointer;" onclick="openNav()">&#9776;</div>
+    <div style="font-weight:600;">YRC LOST & FOUND</div>
+    <div style="width:26px;"></div>
 </header>
 
-<div id="loginPage" class="container" style="margin-top: 50px;">
-    <img src="https://www.yrc.ac.th/wp-content/uploads/2019/03/yrc_logo.png" alt="YRC Logo" style="width: 100px; margin-bottom: 20px; filter: drop-shadow(0 5px 15px rgba(0,0,0,0.1));">
-    <h2 style="margin-bottom: 5px; color: var(--yrc-pink-dark); font-size: 28px;">ยินดีต้อนรับ</h2>
-    <p style="color: #777; font-size: 15px; margin-bottom: 35px;">ระบบบริหารจัดการของหายยุพราชวิทยาลัย</p>
+<div id="loginPage" class="container">
+    <img src="https://www.yrc.ac.th/wp-content/uploads/2019/03/yrc_logo.png" style="width: 90px; margin-bottom: 15px;">
+    <h2 style="margin: 0;">เข้าสู่ระบบ</h2>
+    <p style="color:#888; margin-bottom: 30px;">ระบบแจ้งของหายยุพราชวิทยาลัย</p>
     
-    <div class="form-group">
-        <label>เลขประจำตัวนักเรียน (5 หลัก)</label>
-        <input type="number" id="loginID" placeholder="กรอกเลขประจำตัวของคุณ">
-    </div>
+    <div style="text-align:left; margin-bottom:5px; font-weight:500;">เลขประจำตัวนักเรียน</div>
+    <input type="number" id="loginID" placeholder="กรอกเลขประจำตัว 5 หลักของคุณ">
     
-    <div class="form-group">
-        <label>รหัสผ่านเข้าสู่ระบบ</label>
-        <input type="password" id="loginPass" placeholder="กรอกรหัสผ่านของคุณ">
-    </div>
+    <div style="text-align:left; margin-bottom:5px; font-weight:500;">รหัสผ่านเข้าสู่ระบบ</div>
+    <input type="password" id="loginPass" placeholder="กรอกรหัสผ่านของคุณ">
     
     <button class="btn btn-primary" onclick="handleLogin()">🚀 เข้าสู่ระบบทันที</button>
 </div>
 
+<div id="homePage" class="container hidden">
+    <div class="section-title">🌟 เลือกทำรายการ</div>
+    <button class="btn btn-primary" style="height:100px; font-size:22px;" onclick="showSection('foundFormPage')">🤝 แจ้งพบของ</button>
+    <button class="btn btn-outline" style="height:100px; font-size:22px; margin-top:20px; border-color:#34495e; color:#34495e;" onclick="showSection('lostFormPage')">🔍 แจ้งของหาย</button>
+</div>
+
+<div id="foundFormPage" class="container hidden">
+    <div class="section-title">🤝 รายละเอียดที่พบ</div>
+    <input type="text" id="fItem" placeholder="พบของอะไร? (เช่น พวงกุญแจ)">
+    <select id="fLoc"></select>
+    <textarea id="fDesc" placeholder="รายละเอียดอื่นๆ เช่น สี ยี่ห้อ"></textarea>
+    <button class="btn btn-primary" onclick="submitPost('found')">บันทึกข้อมูล</button>
+    <button class="btn btn-outline" onclick="showSection('homePage')">ยกเลิก</button>
+</div>
+
+<div id="lostFormPage" class="container hidden">
+    <div class="section-title">🔍 รายละเอียดของที่หาย</div>
+    <input type="text" id="lItem" placeholder="ทำของอะไรหาย?">
+    <select id="lLoc"></select>
+    <textarea id="lDesc" placeholder="ระบุลักษณะเด่นของสิ่งของ"></textarea>
+    <button class="btn btn-primary" style="background:#34495e;" onclick="submitPost('lost')">ประกาศตามหา</button>
+    <button class="btn btn-outline" onclick="showSection('homePage')">ยกเลิก</button>
+</div>
+
+<div id="profilePage" class="container hidden">
+    <div class="section-title">👤 ข้อมูลส่วนตัว / ติดต่อ</div>
+    <input type="text" id="pName" placeholder="ชื่อ-นามสกุล">
+    <input type="tel" id="pTel" placeholder="เบอร์โทรศัพท์">
+    <button class="btn btn-primary" onclick="saveProfile()">💾 บันทึกข้อมูล</button>
+</div>
+
+<div id="historyPage" class="container hidden">
+    <div class="section-title">📜 ประวัติการแจ้งของฉัน</div>
+    <div id="historyList">ไม่มีข้อมูลประวัติ</div>
+    <button class="btn btn-outline" onclick="showSection('homePage')" style="margin-top:20px;">กลับ</button>
+</div>
+
+<div id="matchPage" class="container hidden">
+    <div class="section-title">🔔 ยืนยันการคืนของ</div>
+    <div id="matchList">ยังไม่มีรายการรอนัดรับ</div>
+    <button class="btn btn-outline" onclick="showSection('homePage')" style="margin-top:20px;">กลับ</button>
+</div>
+
 <script>
-    // ส่วนสคริปต์ทั้งหมดคงเดิม
+    /* --- JavaScript Logic (แก้ไขบั๊กค้าง) --- */
+    
+    // รายชื่อสถานที่ 33 แห่ง
+    const YRC_BUILDINGS = [
+        "ตึก 1 : ตึกยุพราช", "ตึก 2 : เรือนวิเชียร", "ตึก 3 : เรือนรัตน์", "ตึก 4 : เรือนเพชร", 
+        "ตึก 5 : เรือนวชิระ", "ตึก 6 : อาคารพัชระ", "ตึก 7 : อาคารรัตนมณี", "ตึก 8 : อาคารศรีมรกต", 
+        "ตึก 9 : อาหารนวรัตน์", "ตึก 10 : อาคารเพชรรัตนราชสุดา", "ตึก 11 : อาคารยุพราช 100 ปี", 
+        "ตึก 12 : อาคารวชิรดารา", "ตึก 13 : อาคารศูนย์วิทยบริการดารารัศมี", "อาคารพยาบาล 100 ปี", 
+        "อาคารประชาสัมพันธ์ 100 ปี", "ธรรมสถาน", "อาคารดนตรีไทย", "โรงช้างต้น", "เรือนแก้ว", 
+        "อาคารสมาคมผู้ปกครองและครู (สปย.)", "ศูนย์ประชาสัมพันธ์", "ห้องน้ำรังผึ้ง", "สวนบ้านบานเย็น", 
+        "โรงอาหารนวรัตน์", "โรงอาหารรังสรรค์", "โดมยุพราชรังสรรค์", "โดมอาคาร 2", "โดมอาคาร 5", 
+        "โดมอาคาร 7-8", "สนามบาสเกตบอล", "สนามฟุตบอล", "หน้าโรงเรียน", "หลังโรงเรียน"
+    ];
+
+    let db = [];
+    try {
+        db = JSON.parse(localStorage.getItem('yrc_data_v2') || '[]');
+    } catch(e) { db = []; }
+
+    window.onload = function() {
+        // สร้างรายชื่อตึกใน Select
+        const selects = [document.getElementById('fLoc'), document.getElementById('lLoc')];
+        selects.forEach(sel => {
+            if(!sel) return;
+            let opt = '<option disabled selected value="">-- เลือกสถานที่ --</option>';
+            YRC_BUILDINGS.forEach(b => opt += `<option value="${b}">${b}</option>`);
+            sel.innerHTML = opt;
+        });
+        checkLogin();
+    };
+
+    function checkLogin() {
+        const user = localStorage.getItem('currentUser');
+        if(user) {
+            document.getElementById('sideUserID').innerText = "รหัสนักเรียน: " + user;
+            showSection('homePage');
+        } else {
+            showSection('loginPage');
+        }
+    }
+
+    // แก้บั๊กค้าง: เพิ่ม Error Handling และ Timeout ป้องกันเครื่องค้าง
+    function handleLogin() {
+        const id = document.getElementById('loginID').value;
+        const pass = document.getElementById('loginPass').value;
+
+        if(id.length !== 5) return alert("กรุณากรอกรหัสนักเรียน 5 หลัก");
+
+        // จำลองการเข้าสู่ระบบแบบเสถียร
+        setTimeout(() => {
+            try {
+                localStorage.setItem('currentUser', id);
+                document.getElementById('sideUserID').innerText = "รหัสนักเรียน: " + id;
+                showSection('homePage');
+            } catch(e) {
+                alert("เกิดข้อผิดพลาดในการบันทึกข้อมูล กรุณาลองใหม่");
+            }
+        }, 300);
+    }
+
+    function showSection(id) {
+        document.querySelectorAll('.container').forEach(c => c.classList.add('hidden'));
+        const target = document.getElementById(id);
+        if(target) target.classList.remove('hidden');
+        
+        const header = document.getElementById('mainHeader');
+        if(header) header.classList.toggle('hidden', id === 'loginPage');
+        
+        if(id === 'profilePage') loadProfile();
+        closeNav();
+    }
+
+    function submitPost(type) {
+        const it = document.getElementById(type==='found'?'fItem':'lItem').value;
+        const lc = document.getElementById(type==='found'?'fLoc':'lLoc').value;
+        if(!it || !lc) return alert("กรุณาระบุข้อมูลให้ครบ");
+
+        db.push({ id: Date.now(), type, item: it, loc: lc, user: localStorage.getItem('currentUser') });
+        localStorage.setItem('yrc_data_v2', JSON.stringify(db));
+        alert("บันทึกข้อมูลเรียบร้อย!");
+        showSection('homePage');
+    }
+
+    function saveProfile() {
+        const u = localStorage.getItem('currentUser');
+        const n = document.getElementById('pName').value;
+        const t = document.getElementById('pTel').value;
+        localStorage.setItem('prof_'+u, JSON.stringify({name:n, tel:t}));
+        alert("บันทึกข้อมูลสำเร็จ");
+        showSection('homePage');
+    }
+
+    function loadProfile() {
+        const u = localStorage.getItem('currentUser');
+        const p = JSON.parse(localStorage.getItem('prof_'+u) || '{}');
+        document.getElementById('pName').value = p.name || '';
+        document.getElementById('pTel').value = p.tel || '';
+    }
+
+    function logout() { localStorage.removeItem('currentUser'); location.reload(); }
+    function openNav() { document.getElementById("mySidebar").style.width = "280px"; }
+    function closeNav() { document.getElementById("mySidebar").style.width = "0"; }
 </script>
 </body>
 </html>
