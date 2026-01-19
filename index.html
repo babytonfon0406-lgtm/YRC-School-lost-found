@@ -3,167 +3,167 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YRC School Lost and Found - Full Feature</title>
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+    <title>YRC Lost & Found Official</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
-        /* --- CSS Styling (ละเอียดสูง) --- */
         :root {
             --yrc-pink: #e10098;
             --yrc-pink-dark: #b5007a;
             --yrc-pink-light: #fff5fb;
             --dark-blue: #2d3436;
-            --gray: #f1f2f6;
-            --white: #ffffff;
-            --shadow: 0 10px 30px rgba(225, 0, 152, 0.1);
+            --gray-bg: #f7f9fc;
         }
 
         * { box-sizing: border-box; font-family: 'Kanit', sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background-color: var(--gray); margin: 0; padding-top: 75px; min-height: 100vh; overflow-x: hidden; }
+        body { background-color: var(--gray-bg); margin: 0; padding-top: 70px; min-height: 100vh; color: #333; }
 
+        /* Navigation Bar */
         header {
             background: linear-gradient(135deg, var(--yrc-pink), var(--yrc-pink-dark));
             color: white; padding: 15px 20px; position: fixed; top: 0; width: 100%; z-index: 1000;
-            display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
-        /* Sidebar ตามแบบดั้งเดิมที่หายไป */
+        /* Sidebar Style */
         .sidebar {
             height: 100%; width: 0; position: fixed; z-index: 2000; top: 0; left: 0;
-            background-color: white; overflow-x: hidden; transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            padding-top: 30px; box-shadow: 10px 0 40px rgba(0,0,0,0.1);
+            background-color: white; overflow-x: hidden; transition: 0.4s ease;
+            padding-top: 20px; box-shadow: 10px 0 30px rgba(0,0,0,0.1);
         }
-        .sidebar-header { text-align: center; padding: 20px; border-bottom: 1px solid #eee; margin-bottom: 15px; }
+        .sidebar-header { text-align: center; padding: 20px; border-bottom: 1px solid #eee; margin-bottom: 10px; }
         .sidebar a {
-            padding: 15px 25px; text-decoration: none; font-size: 17px; color: #444;
-            display: flex; align-items: center; gap: 15px; transition: 0.3s;
+            padding: 15px 25px; text-decoration: none; font-size: 16px; color: #444;
+            display: flex; align-items: center; gap: 12px; transition: 0.2s;
         }
-        .sidebar a:hover { background-color: var(--yrc-pink-light); color: var(--yrc-pink); padding-left: 35px; }
+        .sidebar a:hover { background-color: var(--yrc-pink-light); color: var(--yrc-pink); }
 
-        /* Container UI */
+        /* Main Container */
         .container {
-            max-width: 550px; width: 94%; background: white; padding: 35px 25px;
-            border-radius: 35px; margin: 20px auto; text-align: center;
-            box-shadow: var(--shadow); transition: 0.4s; animation: slideIn 0.5s ease-out;
+            max-width: 500px; width: 92%; background: white; padding: 35px 25px;
+            border-radius: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+            margin: 20px auto; text-align: center; animation: slideIn 0.4s ease;
         }
-        @keyframes slideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
         .hidden { display: none !important; }
 
-        /* Form Controls */
+        /* Form Elements */
+        .form-label { text-align: left; display: block; margin-bottom: 5px; font-weight: 500; color: #555; }
         input, select, textarea {
-            width: 100%; padding: 16px; border: 2px solid #eee; border-radius: 18px;
-            font-size: 16px; background: #fafafa; outline: none; margin-bottom: 15px; transition: 0.3s;
+            width: 100%; padding: 16px; border: 2px solid #edf2f7; border-radius: 18px;
+            font-size: 16px; background: #f8fafc; outline: none; margin-bottom: 15px; transition: 0.3s;
         }
-        input:focus, select:focus { border-color: var(--yrc-pink); background: white; }
+        input:focus { border-color: var(--yrc-pink); background: white; }
 
+        /* Buttons */
         .btn {
             width: 100%; padding: 18px; border: none; border-radius: 20px; font-size: 18px;
             font-weight: 600; cursor: pointer; transition: 0.3s; display: flex;
-            align-items: center; justify-content: center; gap: 12px;
+            align-items: center; justify-content: center; gap: 10px; margin-top: 10px;
         }
         .btn-pink { background: var(--yrc-pink); color: white; }
-        .btn-pink:hover { background: var(--yrc-pink-dark); transform: scale(1.02); }
         .btn-dark { background: var(--dark-blue); color: white; }
         .btn-outline { background: white; border: 2px solid var(--yrc-pink); color: var(--yrc-pink); }
 
-        /* Card สำหรับรายการของหาย */
+        /* Item Cards */
         .item-card {
-            background: white; border-radius: 20px; padding: 20px; margin-bottom: 15px;
-            text-align: left; border-left: 6px solid var(--yrc-pink); box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            position: relative; overflow: hidden;
+            background: white; border: 1px solid #eee; border-radius: 20px;
+            padding: 18px; margin-bottom: 15px; text-align: left;
+            border-left: 6px solid var(--yrc-pink);
         }
         .item-card.lost { border-left-color: var(--dark-blue); }
-        .tag { position: absolute; top: 0; right: 0; padding: 5px 15px; font-size: 12px; color: white; border-radius: 0 0 0 15px; }
-
-        .section-title { font-size: 20px; font-weight: 600; color: var(--yrc-pink); text-align: left; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
     </style>
 </head>
 <body>
 
 <div id="mySidebar" class="sidebar">
-    <div style="text-align:right; padding-right:20px;"><span style="font-size:35px; cursor:pointer;" onclick="closeNav()">&times;</span></div>
+    <div style="text-align:right; padding-right:15px;"><span style="font-size:35px; cursor:pointer;" onclick="closeNav()">&times;</span></div>
     <div class="sidebar-header">
         <div style="font-size:45px;">🌸</div>
         <b id="sideUserID" style="font-size:18px;">รหัสนักเรียน: -----</b>
     </div>
     <a href="#" onclick="showSection('homePage')">🏠 หน้าหลัก</a>
-    <a href="#" onclick="showSection('browsePage')">🔍 ตามหาของหาย</a>
+    <a href="#" onclick="showSection('browsePage')">🔍 ตามหาของหาย / แจ้งพบ</a>
     <a href="#" onclick="showSection('profilePage')">👤 ข้อมูลส่วนตัว / ติดต่อ</a>
     <a href="#" onclick="showSection('historyPage')">📜 ประวัติการแจ้งของฉัน</a>
     <a href="#" onclick="showSection('matchPage')">🔔 ยืนยันการคืนของ</a>
-    <a href="#" onclick="logout()" style="color:#e74c3c; border-top:1px solid #eee; margin-top:20px;">🚪 ออกจากระบบ</a>
+    <a href="#" onclick="logout()" style="color:#e74c3c; border-top:1px solid #eee; margin-top:10px;">🚪 ออกจากระบบ</a>
 </div>
 
 <header id="mainHeader" class="hidden">
     <div style="font-size:26px; cursor:pointer;" onclick="openNav()">&#9776;</div>
-    <div style="font-weight:600; letter-spacing:1px;">YRC LOST & FOUND</div>
+    <div style="font-weight:600;">YRC LOST & FOUND</div>
     <div style="width:26px;"></div>
 </header>
 
 <div id="loginPage" class="container">
-    <img src="https://www.yrc.ac.th/wp-content/uploads/2019/03/yrc_logo.png" style="width: 100px; margin-bottom: 20px;">
+    <img src="https://www.yrc.ac.th/wp-content/uploads/2019/03/yrc_logo.png" style="width: 100px; margin-bottom: 15px;">
     <h2>YRC Lost & Found</h2>
-    <div style="text-align:left; margin-bottom:5px; font-weight:500;">เลขประจำตัวนักเรียน</div>
-    <input type="number" id="loginID" placeholder="กรอกเลขประจำตัว 5 หลัก">
-    <div style="text-align:left; margin-bottom:5px; font-weight:500;">รหัสผ่านเข้าสู่ระบบ</div>
+    <p style="color:#888; margin-bottom: 25px;">ระบบบริหารจัดการของหาย ยุพราชวิทยาลัย</p>
+    
+    <span class="form-label">เลขประจำตัวนักเรียน (5 หลัก)</span>
+    <input type="number" id="loginID" placeholder="กรอกเลข 5 หลักของคุณ">
+    
+    <span class="form-label">รหัสผ่านเข้าสู่ระบบ</span>
     <input type="password" id="loginPass" placeholder="กรอกรหัสผ่านของคุณ">
+    
     <button class="btn btn-pink" onclick="handleLogin()">🚀 เข้าสู่ระบบทันที</button>
 </div>
 
 <div id="homePage" class="container hidden">
-    <div class="section-title">✨ ยินดีต้อนรับคุณ, <span id="userDisplayName">นักเรียน</span></div>
+    <div style="text-align:left; margin-bottom:20px;">
+        <h3 style="margin:0; color:var(--yrc-pink);">สวัสดี, <span id="userNameHeader">นักเรียน</span></h3>
+        <p style="margin:5px 0; color:#777;">เลือกทำรายการที่คุณต้องการ</p>
+    </div>
     <button class="btn btn-pink" style="height:110px; font-size:22px;" onclick="showSection('foundFormPage')">🤝 แจ้งพบของหาย</button>
-    <button class="btn btn-dark" style="height:110px; font-size:22px; margin-top:20px;" onclick="showSection('lostFormPage')">🔍 แจ้งของหาย</button>
-    <button class="btn btn-outline" style="margin-top:25px;" onclick="showSection('browsePage')">📋 ดูประกาศของหายทั้งหมด</button>
+    <button class="btn btn-dark" style="height:110px; font-size:22px;" onclick="showSection('lostFormPage')">🔍 ฉันทำของหาย</button>
+    <button class="btn btn-outline" style="margin-top:20px;" onclick="showSection('browsePage')">📋 ดูประกาศทั้งหมด</button>
 </div>
 
 <div id="browsePage" class="container hidden">
-    <div class="section-title">🔍 รายการประกาศล่าสุด</div>
-    <div id="allPostsContainer"></div>
-    <button class="btn btn-outline" onclick="showSection('homePage')" style="margin-top:20px;">กลับหน้าหลัก</button>
+    <h3 style="text-align:left; color:var(--yrc-pink);">🔍 ประกาศทั้งหมด</h3>
+    <div id="browseContainer"></div>
+    <button class="btn btn-outline" onclick="showSection('homePage')" style="margin-top:20px;">กลับ</button>
 </div>
 
 <div id="foundFormPage" class="container hidden">
-    <div class="section-title">🤝 รายละเอียดสิ่งของที่พบ</div>
-    <input type="text" id="fItem" placeholder="พบของอะไร? (เช่น หูฟัง Apple)">
+    <h3>🤝 แจ้งพบของ</h3>
+    <input type="text" id="fName" placeholder="ชื่อของที่พบ">
     <select id="fLoc"></select>
-    <textarea id="fDesc" placeholder="รายละเอียดเด่นๆ (เช่น มีเคสสีน้ำเงิน)"></textarea>
-    <button class="btn btn-pink" onclick="submitPost('found')">📢 ลงประกาศแจ้งพบ</button>
-    <button class="btn btn-outline" onclick="showSection('homePage')" style="margin-top:15px;">ยกเลิก</button>
+    <textarea id="fDesc" placeholder="รายละเอียดอื่นๆ"></textarea>
+    <button class="btn btn-pink" onclick="submitPost('found')">ลงประกาศ</button>
+    <button class="btn btn-outline" onclick="showSection('homePage')">ยกเลิก</button>
 </div>
 
 <div id="lostFormPage" class="container hidden">
-    <div class="section-title">🔍 รายละเอียดของที่หายไป</div>
-    <input type="text" id="lItem" placeholder="ทำอะไรหาย? (เช่น กุญแจรถ)">
+    <h3>🔍 แจ้งของหาย</h3>
+    <input type="text" id="lName" placeholder="ชื่อของที่หาย">
     <select id="lLoc"></select>
-    <textarea id="lDesc" placeholder="ระบุตำหนิหรือจุดสังเกต"></textarea>
-    <button class="btn btn-dark" onclick="submitPost('lost')">🔍 เริ่มการค้นหา</button>
-    <button class="btn btn-outline" onclick="showSection('homePage')" style="margin-top:15px;">ยกเลิก</button>
-</div>
-
-<div id="historyPage" class="container hidden">
-    <div class="section-title">📜 ประวัติการแจ้งของฉัน</div>
-    <div id="myHistoryList"></div>
-    <button class="btn btn-outline" onclick="showSection('homePage')" style="margin-top:20px;">กลับ</button>
-</div>
-
-<div id="matchPage" class="container hidden">
-    <div class="section-title">🔔 รายการนัดรับของคืน</div>
-    <div id="matchList"></div>
-    <button class="btn btn-outline" onclick="showSection('homePage')" style="margin-top:20px;">กลับ</button>
+    <textarea id="lDesc" placeholder="จุดสังเกตของสิ่งของ"></textarea>
+    <button class="btn btn-dark" onclick="submitPost('lost')">ประกาศตามหา</button>
+    <button class="btn btn-outline" onclick="showSection('homePage')">ยกเลิก</button>
 </div>
 
 <div id="profilePage" class="container hidden">
-    <div class="section-title">👤 ข้อมูลส่วนตัว</div>
-    <input type="text" id="pName" placeholder="ชื่อจริง-นามสกุล">
-    <input type="tel" id="pTel" placeholder="เบอร์โทรศัพท์ติดต่อ">
-    <button class="btn btn-pink" onclick="saveProfile()">💾 บันทึกข้อมูล</button>
+    <h3>👤 ข้อมูลการติดต่อ</h3>
+    <input type="text" id="pName" placeholder="ชื่อ-นามสกุล">
+    <input type="tel" id="pTel" placeholder="เบอร์โทรศัพท์">
+    <button class="btn btn-pink" onclick="saveProfile()">บันทึก</button>
+</div>
+
+<div id="historyPage" class="container hidden">
+    <h3>📜 ประวัติของฉัน</h3>
+    <div id="historyContainer"></div>
+</div>
+
+<div id="matchPage" class="container hidden">
+    <h3>🔔 นัดรับของคืน</h3>
+    <div id="matchContainer"></div>
 </div>
 
 <script>
-    /* --- JavaScript Logic: Ultimate Stable --- */
-    
-    const YRC_BUILDINGS = [
+    /* --- LOGIC: ANTI-FREEZE & STABLE --- */
+    const BUILDINGS = [
         "ตึก 1 : ตึกยุพราช", "ตึก 2 : เรือนวิเชียร", "ตึก 3 : เรือนรัตน์", "ตึก 4 : เรือนเพชร", 
         "ตึก 5 : เรือนวชิระ", "ตึก 6 : อาคารพัชระ", "ตึก 7 : อาคารรัตนมณี", "ตึก 8 : อาคารศรีมรกต", 
         "ตึก 9 : อาหารนวรัตน์", "ตึก 10 : อาคารเพชรรัตนราชสุดา", "ตึก 11 : อาคารยุพราช 100 ปี", 
@@ -174,21 +174,27 @@
         "โดมอาคาร 7-8", "สนามบาสเกตบอล", "สนามฟุตบอล", "หน้าโรงเรียน", "หลังโรงเรียน"
     ];
 
-    let postDB = JSON.parse(localStorage.getItem('yrc_full_db') || '[]');
+    let itemsDB = [];
+    try {
+        itemsDB = JSON.parse(localStorage.getItem('yrc_final_db') || '[]');
+    } catch(e) { itemsDB = []; }
 
     window.onload = function() {
         const selects = [document.getElementById('fLoc'), document.getElementById('lLoc')];
-        selects.forEach(sel => {
+        selects.forEach(s => {
+            if(!s) return;
             let opt = '<option disabled selected value="">-- เลือกสถานที่ --</option>';
-            YRC_BUILDINGS.forEach(b => opt += `<option value="${b}">${b}</option>`);
-            sel.innerHTML = opt;
+            BUILDINGS.forEach(b => opt += `<option value="${b}">${b}</option>`);
+            s.innerHTML = opt;
         });
         checkLogin();
     };
 
     function handleLogin() {
         const id = document.getElementById('loginID').value;
-        if(id.length !== 5) return alert("กรุณากรอกเลข 5 หลัก");
+        const pass = document.getElementById('loginPass').value;
+        if(id.length !== 5) return alert("กรุณากรอกรหัส 5 หลัก");
+        
         localStorage.setItem('currentUser', id);
         checkLogin();
     }
@@ -198,7 +204,7 @@
         if(user) {
             document.getElementById('sideUserID').innerText = "รหัสนักเรียน: " + user;
             const prof = JSON.parse(localStorage.getItem('prof_'+user) || '{}');
-            document.getElementById('userDisplayName').innerText = prof.name || user;
+            document.getElementById('userNameHeader').innerText = prof.name || user;
             showSection('homePage');
         } else {
             showSection('loginPage');
@@ -207,102 +213,77 @@
 
     function showSection(id) {
         document.querySelectorAll('.container').forEach(c => c.classList.add('hidden'));
-        document.getElementById(id).classList.remove('hidden');
+        const target = document.getElementById(id);
+        if(target) target.classList.remove('hidden');
         document.getElementById('mainHeader').classList.toggle('hidden', id === 'loginPage');
         
-        if(id === 'browsePage') renderAllPosts();
+        if(id === 'browsePage') renderBrowse();
         if(id === 'historyPage') renderHistory();
         if(id === 'matchPage') renderMatches();
         closeNav();
     }
 
     function submitPost(type) {
-        const item = document.getElementById(type==='found'?'fItem':'lItem').value;
-        const loc = document.getElementById(type==='found'?'fLoc':'lLoc').value;
-        const desc = document.getElementById(type==='found'?'fDesc':'lDesc').value;
+        const n = document.getElementById(type==='found'?'fName':'lName').value;
+        const l = document.getElementById(type==='found'?'fLoc':'lLoc').value;
+        if(!n || !l) return alert("กรุณากรอกชื่อสิ่งของและสถานที่");
 
-        if(!item || !loc) return alert("กรุณากรอกข้อมูลให้ครบ");
-
-        const newPost = {
-            id: Date.now(),
-            type, item, loc, desc,
-            user: localStorage.getItem('currentUser'),
-            status: 'open',
-            date: new Date().toLocaleDateString('th-TH')
-        };
-
-        postDB.push(newPost);
-        localStorage.setItem('yrc_full_db', JSON.stringify(postDB));
-        alert("🎉 ลงประกาศสำเร็จ!");
+        itemsDB.push({ id: Date.now(), type, name: n, loc: l, status: 'open', user: localStorage.getItem('currentUser') });
+        localStorage.setItem('yrc_final_db', JSON.stringify(itemsDB));
+        alert("ลงประกาศเรียบร้อย!");
         showSection('browsePage');
     }
 
-    function renderAllPosts() {
-        const container = document.getElementById('allPostsContainer');
-        const openPosts = postDB.filter(p => p.status === 'open').reverse();
-        container.innerHTML = openPosts.map(p => `
-            <div class="item-card ${p.type}">
-                <div class="tag" style="background:${p.type==='found'?'var(--yrc-pink)':'var(--dark-blue)'}">
-                    ${p.type==='found'?'พบของ':'ของหาย'}
-                </div>
-                <b>📦 ${p.item}</b><br>
-                <small>📍 ${p.loc}</small><br>
-                <p style="font-size:14px; margin:5px 0;">${p.desc}</p>
-                <button class="btn btn-pink" style="padding:10px; font-size:14px; margin-top:10px;" onclick="claim('${p.id}')">
-                    ${p.type==='found'?'🙋 นี่คือของฉัน':'🤝 ฉันเจอของนี้'}
-                </button>
+    function renderBrowse() {
+        const container = document.getElementById('browseContainer');
+        const openList = itemsDB.filter(i => i.status === 'open').reverse();
+        container.innerHTML = openList.map(i => `
+            <div class="item-card ${i.type}">
+                <b>${i.type==='found'?'[พบของ]':'[หาย]'} ${i.name}</b><br>
+                <small>📍 ${i.loc}</small><br>
+                <button class="btn btn-pink" style="padding:10px; font-size:14px;" onclick="claim(${i.id})">นี่คือของฉัน / ฉันเจอ</button>
             </div>
-        `).join('') || '<p>ยังไม่มีรายการประกาศ</p>';
+        `).join('') || 'ไม่มีประกาศในขณะนี้';
     }
 
-    function claim(pid) {
-        const user = localStorage.getItem('currentUser');
-        const idx = postDB.findIndex(p => p.id == pid);
-        if(postDB[idx].user === user) return alert("คุณเป็นเจ้าของประกาศนี้");
-        
-        postDB[idx].status = 'matched';
-        postDB[idx].matchWith = user;
-        localStorage.setItem('yrc_full_db', JSON.stringify(postDB));
-        alert("ส่งคำนัดรับแล้ว! โปรดเช็กที่เมนู 'ยืนยันการคืนของ'");
+    function claim(id) {
+        const idx = itemsDB.findIndex(i => i.id == id);
+        if(itemsDB[idx].user == localStorage.getItem('currentUser')) return alert("คุณเป็นเจ้าของประกาศนี้");
+        itemsDB[idx].status = 'matched';
+        itemsDB[idx].matchWith = localStorage.getItem('currentUser');
+        localStorage.setItem('yrc_final_db', JSON.stringify(itemsDB));
+        alert("นัดรับแล้ว! เช็กที่เมนู 'ยืนยันการคืนของ'");
         showSection('matchPage');
     }
 
     function renderMatches() {
-        const container = document.getElementById('matchList');
+        const c = document.getElementById('matchContainer');
         const user = localStorage.getItem('currentUser');
-        const matches = postDB.filter(p => (p.user === user || p.matchWith === user) && p.status === 'matched');
-        container.innerHTML = matches.map(p => {
-            const other = (p.user === user) ? p.matchWith : p.user;
-            const prof = JSON.parse(localStorage.getItem('prof_'+other) || '{}');
-            return `<div class="item-card" style="border-left-color:#f1c40f">
-                <b>นัดรับ: ${p.item}</b><br>
-                <small>ติดต่อคุณ: ${prof.name || other}</small><br>
-                <small>โทร: ${prof.tel || 'ไม่ระบุ'}</small>
-            </div>`;
-        }).join('') || '<p>ยังไม่มีรายการนัดรับ</p>';
+        const matches = itemsDB.filter(i => (i.user == user || i.matchWith == user) && i.status == 'matched');
+        c.innerHTML = matches.map(i => {
+            const other = (i.user == user) ? i.matchWith : i.user;
+            const p = JSON.parse(localStorage.getItem('prof_'+other) || '{}');
+            return `<div class="item-card"><b>นัดคืน: ${i.name}</b><br>ติดต่อ: ${p.name || other}<br>โทร: ${p.tel || 'ไม่ระบุ'}</div>`;
+        }).join('') || 'ไม่มีรายการรอนัดคืน';
     }
 
     function renderHistory() {
-        const container = document.getElementById('myHistoryList');
-        const user = localStorage.getItem('currentUser');
-        const myPosts = postDB.filter(p => p.user === user);
-        container.innerHTML = myPosts.map(p => `
-            <div class="item-card">
-                <b>${p.item}</b> (${p.status})<br><small>${p.date} ที่ ${p.loc}</small>
-            </div>
-        `).join('') || '<p>ยังไม่มีประวัติ</p>';
+        const c = document.getElementById('historyContainer');
+        const my = itemsDB.filter(i => i.user == localStorage.getItem('currentUser'));
+        c.innerHTML = my.map(i => `<div class="item-card"><b>${i.name}</b><br>สถานะ: ${i.status}</div>`).join('') || 'ไม่มีประวัติ';
     }
 
     function saveProfile() {
-        const user = localStorage.getItem('currentUser');
-        const n = document.getElementById('pName').value;
-        const t = document.getElementById('pTel').value;
-        localStorage.setItem('prof_'+user, JSON.stringify({name:n, tel:t}));
-        alert("บันทึกโปรไฟล์แล้ว");
+        const u = localStorage.getItem('currentUser');
+        localStorage.setItem('prof_'+u, JSON.stringify({
+            name: document.getElementById('pName').value,
+            tel: document.getElementById('pTel').value
+        }));
+        alert("บันทึกแล้ว");
         showSection('homePage');
     }
 
-    function logout() { localStorage.removeItem('currentUser'); location.reload(); }
+    function logout() { localStorage.clear(); location.reload(); }
     function openNav() { document.getElementById("mySidebar").style.width = "280px"; }
     function closeNav() { document.getElementById("mySidebar").style.width = "0"; }
 </script>
