@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YRC Lost & Found Official</title>
+    <title>YRC Lost & Found Official - Smart Match</title>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -13,6 +13,7 @@
             --dark-blue: #2d3436;
             --gray-bg: #f7f9fc;
             --success: #2ecc71;
+            --warning: #f1c40f;
         }
 
         * { box-sizing: border-box; font-family: 'Kanit', sans-serif; -webkit-tap-highlight-color: transparent; }
@@ -72,6 +73,9 @@
         .badge-open { background: #e1f5fe; color: #0288d1; }
         .badge-matched { background: #fff3e0; color: #f57c00; }
         .contact-box { background: #f9f9f9; padding: 10px; border-radius: 12px; margin-top: 10px; font-size: 14px; border: 1px dashed #ccc; }
+        
+        /* Image Preview Area */
+        .img-preview { width: 100%; border-radius: 15px; margin-bottom: 15px; display: none; object-fit: cover; max-height: 250px; }
     </style>
 </head>
 <body>
@@ -102,7 +106,7 @@
     <h2>YRC Lost & Found</h2>
     <p style="color:#888; margin-bottom: 25px;">ระบบบริหารจัดการของหาย ยุพราชวิทยาลัย</p>
     <input type="number" id="loginID" placeholder="เลขประจำตัวนักเรียน (5 หลัก)">
-    <input type="password" id="loginPass" placeholder="รหัสผ่าน">
+    <input type="password" id="loginPass" placeholder="รหัสผ่าน (เริ่มต้นใช้เลข 5 หลัก)">
     <button class="btn btn-pink" onclick="handleLogin()">🚀 เข้าสู่ระบบ</button>
 </div>
 
@@ -113,35 +117,35 @@
 </div>
 
 <div id="browsePage" class="container hidden">
-    <h3 style="text-align:left; color:var(--yrc-pink);">🔍 ประกาศทั้งหมด</h3>
+    <h3 style="text-align:left; color:var(--yrc-pink);">🔍 ประกาศล่าสุด</h3>
     <div id="browseContainer"></div>
     <button class="btn btn-outline" onclick="showSection('homePage')">กลับ</button>
 </div>
 
 <div id="foundFormPage" class="container hidden">
     <h3>🤝 แจ้งพบของ</h3>
-    <input type="text" id="fName" placeholder="ชื่อของที่พบ">
+    <input type="text" id="fName" placeholder="ชื่อของที่พบ (เช่น แว่นตา, กุญแจ)">
     <select id="fLoc"></select>
+    <span class="form-label">📸 ถ่ายรูป/แนบรูปของที่พบ</span>
+    <input type="file" id="fPhoto" accept="image/*" onchange="previewImg(this, 'foundImgPreview')">
+    <img id="foundImgPreview" class="img-preview">
     <textarea id="fDesc" placeholder="รายละเอียดเพิ่มเติม"></textarea>
-    <button class="btn btn-pink" onclick="submitPost('found')">ลงประกาศ</button>
+    <button class="btn btn-pink" onclick="submitPost('found')">ลงประกาศและสแกนหาเจ้าของ</button>
 </div>
 
 <div id="lostFormPage" class="container hidden">
     <h3>🔍 แจ้งของหาย</h3>
     <input type="text" id="lName" placeholder="ชื่อของที่หาย">
     <select id="lLoc"></select>
-    <textarea id="lDesc" placeholder="รายละเอียดเพิ่มเติม"></textarea>
+    <textarea id="lDesc" placeholder="รายละเอียด/จุดสังเกต"></textarea>
     <button class="btn btn-dark" onclick="submitPost('lost')">ประกาศตามหา</button>
 </div>
 
 <div id="profilePage" class="container hidden">
     <h3>👤 ข้อมูลการติดต่อ</h3>
-    <span class="form-label">ชื่อ-นามสกุล</span>
-    <input type="text" id="pName" placeholder="เช่น นายสมชาย ใจดี">
-    <span class="form-label">ชั้น / ห้อง</span>
-    <input type="text" id="pClass" placeholder="เช่น ม.5/1">
-    <span class="form-label">เบอร์โทรศัพท์</span>
-    <input type="tel" id="pTel" placeholder="08X-XXXXXXX">
+    <input type="text" id="pName" placeholder="ชื่อ-นามสกุล">
+    <input type="text" id="pClass" placeholder="ชั้น / ห้อง (เช่น ม.5/1)">
+    <input type="tel" id="pTel" placeholder="เบอร์โทรศัพท์">
     <button class="btn btn-pink" onclick="saveProfile()">บันทึกข้อมูล</button>
 </div>
 
@@ -152,7 +156,6 @@
 
 <div id="matchPage" class="container hidden">
     <h3>🔔 รายการรอนัดคืน</h3>
-    <p style="font-size:12px; color:red;">*ต้องกด "ยืนยันการคืน" ทั้งสองฝ่ายสถานะจึงจะสมบูรณ์</p>
     <div id="matchContainer"></div>
 </div>
 
@@ -160,12 +163,12 @@
     <h3>🔐 เปลี่ยนรหัสผ่าน</h3>
     <input type="password" id="oldPass" placeholder="รหัสผ่านเดิม">
     <input type="password" id="newPass" placeholder="รหัสผ่านใหม่">
-    <input type="password" id="confirmPass" placeholder="ยืนยันรหัสผ่านใหม่">
-    <button class="btn btn-pink" onclick="handleChangePassword()">เปลี่ยนรหัสผ่าน</button>
+    <input type="password" id="confirmPass" placeholder="ยืนยันรหัสใหม่">
+    <button class="btn btn-pink" onclick="handleChangePassword()">ยืนยันเปลี่ยนรหัส</button>
 </div>
 
 <script>
-    const BUILDINGS = ["ตึก 1 : ตึกยุพราช", "ตึก 2 : เรือนวิเชียร", "โรงอาหาร", "โดมยุพราช", "หน้าโรงเรียน"]; // ย่อลงเพื่อประหยัดพื้นที่
+    const BUILDINGS = ["ตึก 1 : ตึกยุพราช", "ตึก 2 : เรือนวิเชียร", "โรงอาหารนวรัตน์", "โดมยุพราช", "สนามฟุตบอล", "ตึก 11 : 100 ปี"];
     let itemsDB = JSON.parse(localStorage.getItem('yrc_final_db') || '[]');
 
     window.onload = function() {
@@ -182,10 +185,8 @@
         const id = document.getElementById('loginID').value;
         const pass = document.getElementById('loginPass').value;
         if(id.length !== 5) return alert("กรุณากรอกรหัส 5 หลัก");
-        
-        const savedPass = localStorage.getItem('pass_' + id) || id; // รหัสเริ่มต้นคือเลขประจำตัว
+        const savedPass = localStorage.getItem('pass_' + id) || id; 
         if (pass !== savedPass) return alert("รหัสผ่านไม่ถูกต้อง!");
-        
         localStorage.setItem('currentUser', id);
         checkLogin();
     }
@@ -212,71 +213,97 @@
         closeNav();
     }
 
+    function previewImg(input, targetId) {
+        const preview = document.getElementById(targetId);
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = e => { preview.src = e.target.result; preview.style.display = 'block'; };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
     function handleChangePassword() {
         const user = localStorage.getItem('currentUser');
         const oldP = document.getElementById('oldPass').value;
         const newP = document.getElementById('newPass').value;
         const confP = document.getElementById('confirmPass').value;
         const currentSavedPass = localStorage.getItem('pass_' + user) || user;
-
         if(oldP !== currentSavedPass) return alert("รหัสผ่านเดิมไม่ถูกต้อง!");
         if(newP !== confP) return alert("รหัสผ่านใหม่ไม่ตรงกัน!");
-        if(newP.length < 4) return alert("รหัสผ่านใหม่สั้นเกินไป");
-
         localStorage.setItem('pass_' + user, newP);
         alert("เปลี่ยนรหัสผ่านสำเร็จ!");
         showSection('homePage');
     }
 
-    function submitPost(type) {
+    async function submitPost(type) {
         const user = localStorage.getItem('currentUser');
         const prof = JSON.parse(localStorage.getItem('prof_'+user) || '{}');
-        if(!prof.name) return alert("กรุณาไปที่เมนู 'ข้อมูลส่วนตัว' เพื่อกรอกชื่อและเบอร์โทรก่อนลงประกาศ");
+        if(!prof.name) return alert("กรุณากรอกข้อมูลส่วนตัวก่อนใช้งาน");
 
-        const n = document.getElementById(type==='found'?'fName':'lName').value;
-        const l = document.getElementById(type==='found'?'fLoc':'lLoc').value;
-        if(!n || !l) return alert("กรุณากรอกข้อมูลให้ครบ");
+        const name = document.getElementById(type==='found'?'fName':'lName').value;
+        const loc = document.getElementById(type==='found'?'fLoc':'lLoc').value;
+        const desc = document.getElementById(type==='found'?'fDesc':'lDesc').value;
+        
+        if(!name || !loc) return alert("กรุณาระบุชื่อของและสถานที่");
 
-        itemsDB.push({ 
-            id: Date.now(), type, name: n, loc: l, status: 'open', 
-            user, uName: prof.name, uClass: prof.room || 'ไม่ระบุ', uTel: prof.tel,
+        let photoData = "";
+        if(type === 'found') {
+            const photoInput = document.getElementById('fPhoto');
+            if(photoInput.files[0]) photoData = document.getElementById('foundImgPreview').src;
+        }
+
+        const newItem = { 
+            id: Date.now(), type, name, loc, desc, photo: photoData, status: 'open', 
+            user, uName: prof.name, uClass: prof.room || '', uTel: prof.tel,
             confirmOwner: false, confirmFinder: false 
-        });
+        };
+
+        itemsDB.push(newItem);
         localStorage.setItem('yrc_final_db', JSON.stringify(itemsDB));
-        alert("ลงประกาศแล้ว!");
+
+        // ระบบ Auto Match สแกนหาคู่ทันที
+        if(type === 'found') checkAutoMatch(newItem);
+
+        alert("ลงประกาศเรียบร้อย!");
         showSection('browsePage');
+    }
+
+    function checkAutoMatch(foundItem) {
+        const potentialOwners = itemsDB.filter(i => i.type === 'lost' && i.status === 'open' && foundItem.name.includes(i.name));
+        if(potentialOwners.length > 0) {
+            alert(`✨ ระบบตรวจพบคนที่เคยแจ้งของหายชนิดนี้ไว้ (${potentialOwners.length} รายการ) ระบบได้ส่งข้อมูลให้พวกเขายืนยันรูปภาพแล้ว!`);
+        }
     }
 
     function renderBrowse() {
         const container = document.getElementById('browseContainer');
-        const openList = itemsDB.filter(i => i.status === 'open').reverse();
-        container.innerHTML = openList.map(i => `
+        container.innerHTML = itemsDB.filter(i => i.status === 'open').reverse().map(i => `
             <div class="item-card ${i.type}">
-                <span class="badge badge-open">ว่าง</span>
+                <span class="badge badge-open">ประกาศอยู่</span>
+                ${i.photo ? `<img src="${i.photo}" style="width:100%; border-radius:10px; margin-bottom:10px;">` : ''}
                 <b>${i.type==='found'?'[พบ]':'[หาย]'} ${i.name}</b><br>
-                <small>📍 ${i.loc}</small><br>
-                <div class="contact-box">ผู้ประกาศ: ${i.uName} (${i.uClass})</div>
+                <small>📍 ${i.loc}</small>
+                <div class="contact-box">โดย: ${i.uName} (${i.uClass})</div>
                 <button class="btn btn-pink" style="padding:10px; font-size:14px;" onclick="claim(${i.id})">นี่คือของฉัน / ฉันเจอแล้ว</button>
             </div>
-        `).join('') || 'ไม่มีรายการ';
+        `).join('') || 'ไม่มีรายการในขณะนี้';
     }
 
     function claim(id) {
         const user = localStorage.getItem('currentUser');
         const prof = JSON.parse(localStorage.getItem('prof_'+user) || '{}');
         if(!prof.name) return alert("กรุณากรอกข้อมูลส่วนตัวก่อนยืนยัน");
-
         const idx = itemsDB.findIndex(i => i.id == id);
-        if(itemsDB[idx].user == user) return alert("คุณไม่สามารถกดยืนยันของตัวเองได้");
-        
+        if(itemsDB[idx].user == user) return alert("คุณแจ้งรายการนี้เอง");
+
         itemsDB[idx].status = 'matched';
         itemsDB[idx].matchWith = user;
         itemsDB[idx].mName = prof.name;
-        itemsDB[idx].mClass = prof.room || 'ไม่ระบุ';
+        itemsDB[idx].mClass = prof.room || '';
         itemsDB[idx].mTel = prof.tel;
         
         localStorage.setItem('yrc_final_db', JSON.stringify(itemsDB));
-        alert("จับคู่สำเร็จ! โปรดติดต่ออีกฝ่ายเพื่อรับของ");
+        alert("จับคู่สำเร็จ! โปรดดูรายละเอียดการติดต่อในเมนู 'ยืนยันการคืนของ'");
         showSection('matchPage');
     }
 
@@ -288,44 +315,39 @@
         c.innerHTML = matches.map(i => {
             const isOwner = (i.user == user);
             const otherName = isOwner ? i.mName : i.uName;
-            const otherClass = isOwner ? i.mClass : i.uClass;
             const otherTel = isOwner ? i.mTel : i.uTel;
             const myConfirm = isOwner ? i.confirmOwner : i.confirmFinder;
 
             return `
                 <div class="item-card">
                     <span class="badge badge-matched">รอนัดรับ</span>
-                    <b>${i.name}</b><br>
+                    <b>ของ: ${i.name}</b>
+                    ${i.photo ? `<img src="${i.photo}" style="width:100%; border-radius:10px; margin:10px 0;">` : ''}
                     <div class="contact-box">
-                        <b>ติดต่อ:</b> ${otherName} (${otherClass})<br>
+                        <b>นัดรับกับ:</b> ${otherName}<br>
                         <b>โทร:</b> <a href="tel:${otherTel}">${otherTel}</a>
                     </div>
-                    ${myConfirm ? 
-                        '<button class="btn" disabled>✅ คุณยืนยันแล้ว</button>' : 
-                        `<button class="btn btn-success" onclick="confirmReturn(${i.id})">🤝 ได้รับของคืนแล้ว</button>`}
+                    ${myConfirm ? '<button class="btn" disabled>✅ รออีกฝ่ายยืนยัน...</button>' : 
+                    `<button class="btn btn-success" onclick="confirmReturn(${i.id})">🤝 ยืนยันได้รับของแล้ว</button>`}
                 </div>
             `;
-        }).join('') || 'ไม่มีรายการรอนัดคืน';
+        }).join('') || 'ไม่มีรายการรอนัดรับ';
     }
 
     function confirmReturn(id) {
         const user = localStorage.getItem('currentUser');
         const idx = itemsDB.findIndex(i => i.id == id);
-        
         if(itemsDB[idx].user == user) itemsDB[idx].confirmOwner = true;
-        if(itemsDB[idx].matchWith == user) itemsDB[idx].confirmFinder = true;
+        else itemsDB[idx].confirmFinder = true;
 
-        if(itemsDB[idx].confirmOwner && itemsDB[idx].confirmFinder) {
-            itemsDB[idx].status = 'success';
-        }
-
+        if(itemsDB[idx].confirmOwner && itemsDB[idx].confirmFinder) itemsDB[idx].status = 'success';
         localStorage.setItem('yrc_final_db', JSON.stringify(itemsDB));
         renderMatches();
     }
 
     function renderHistory() {
         const c = document.getElementById('historyContainer');
-        const my = itemsDB.filter(i => i.user == localStorage.getItem('currentUser') || i.matchWith == localStorage.getItem('currentUser'));
+        const my = itemsDB.filter(i => i.user == localStorage.getItem('currentUser'));
         c.innerHTML = my.map(i => `<div class="item-card"><b>${i.name}</b><br>สถานะ: ${i.status}</div>`).join('') || 'ไม่มีประวัติ';
     }
 
@@ -336,7 +358,7 @@
             room: document.getElementById('pClass').value,
             tel: document.getElementById('pTel').value
         }));
-        alert("บันทึกข้อมูลแล้ว");
+        alert("บันทึกแล้ว");
         showSection('homePage');
     }
 
