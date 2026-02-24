@@ -12,12 +12,8 @@
         body { 
             background-image: linear-gradient(rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.6)), 
                               url('https://cdn.phototourl.com/uploads/2026-02-24-35dc78c2-07d5-409b-969d-35fb2cad1a46.jpg'); 
-            background-size: cover;
-            background-attachment: fixed;
-            background-position: center;
-            margin: 0; 
-            padding-top: 70px; 
-            min-height: 100vh;
+            background-size: cover; background-attachment: fixed; background-position: center;
+            margin: 0; padding-top: 70px; min-height: 100vh;
         }
         
         header {
@@ -58,165 +54,164 @@
         }
 
         .img-preview { width: 100%; border-radius: 20px; margin-bottom: 15px; display: none; object-fit: cover; max-height: 250px; }
-        
         .admin-only { border: 2px solid #ffd1e8; background: #fff9fc; }
     </style>
 </head>
 <body>
 
-<header id="mainHeader" class="hidden">
+<header id="appHeader" class="hidden">
     <div style="display: flex; align-items: center; gap: 10px;">
         <img src="https://cdn.phototourl.com/uploads/2026-02-24-35dc78c2-07d5-409b-969d-35fb2cad1a46.jpg" style="height: 35px; width: 35px; border-radius: 50%; object-fit: cover; border: 2px solid white;">
         <div style="font-weight:600;">YRC LOST & FOUND</div>
     </div>
-    <div onclick="location.reload()" style="cursor:pointer; font-size:14px; opacity:0.9;">ออกจากระบบ</div>
+    <div onclick="window.location.reload()" style="cursor:pointer; font-size:14px; opacity:0.9;">ออกจากระบบ</div>
 </header>
 
-<div id="loginPage" class="container">
+<div id="loginView" class="container">
     <img src="https://cdn.phototourl.com/uploads/2026-02-24-35dc78c2-07d5-409b-969d-35fb2cad1a46.jpg" style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; margin-bottom: 20px; border: 4px solid var(--yrc-pink);">
     <h2>YRC Lost & Found</h2>
     <p style="color: #666; margin-bottom: 25px;">ระบบแจ้งของหายโรงเรียนยุพราชวิทยาลัย</p>
-    <input type="text" id="loginID" placeholder="รหัสนักเรียน 5 หลัก / บัญชีครู">
-    <input type="password" id="loginPass" placeholder="รหัสผ่าน">
-    <button class="btn btn-pink" onclick="handleLoginNow()">เข้าสู่ระบบ</button>
+    <input type="text" id="userField" placeholder="รหัสนักเรียน 5 หลัก / บัญชีครู">
+    <input type="password" id="passField" placeholder="รหัสผ่าน">
+    <button class="btn btn-pink" onclick="executeAppLogin()">เข้าสู่ระบบ</button>
 </div>
 
-<div id="homePage" class="container hidden">
-    <h3 style="text-align: left; color: var(--yrc-pink);">สวัสดีคุณ <span id="userDisp"></span></h3>
+<div id="homeView" class="container hidden">
+    <h3 style="text-align: left; color: var(--yrc-pink);">สวัสดีคุณ <span id="displayUserName"></span></h3>
+    <button class="btn btn-pink" style="height:120px; margin-bottom:20px;" onclick="navigateTo('formView')">📝 แจ้งทำของหายใหม่</button>
     
-    <button class="btn btn-pink" style="height:120px; margin-bottom:20px;" onclick="showSection('formPage')">📝 แจ้งทำของหายใหม่</button>
-    
-    <div id="adminMenu" class="hidden">
+    <div id="adminPanel" class="hidden">
         <hr style="border: 1px solid #eee; margin: 20px 0;">
         <p style="font-size: 14px; color: #666;">เมนูสำหรับเจ้าหน้าที่ สปย.</p>
-        <button class="btn btn-dark" style="height:100px;" onclick="showSection('listPage')">🔍 ดูรายการที่แจ้งหายทั้งหมด</button>
+        <button class="btn btn-dark" style="height:100px;" onclick="navigateTo('listView')">🔍 ดูรายการที่แจ้งหายทั้งหมด</button>
     </div>
 </div>
 
-<div id="formPage" class="container hidden">
+<div id="formView" class="container hidden">
     <h3>📝 รายละเอียดสิ่งของ</h3>
     <input type="text" id="itemName" placeholder="ชื่อสิ่งของที่หาย">
     <input type="text" id="itemLoc" placeholder="สถานที่คาดว่าหาย">
     <textarea id="itemDesc" rows="3" placeholder="รายละเอียดอื่นๆ"></textarea>
-    
-    <input type="file" accept="image/*" onchange="handlePreview(this)">
+    <input type="file" accept="image/*" onchange="handleFilePreview(this)">
     <img id="imgView" class="img-preview">
-
     <div style="background:#f0f7ff; padding:20px; border-radius:20px; margin-top:10px; text-align: left;">
         <label style="font-weight: 600; color: #0056b3;">📞 ข้อมูลติดต่อ (เฉพาะ สปย. เห็น)</label>
-        <input type="text" id="uName" placeholder="ชื่อ-นามสกุล" style="margin-top:10px;">
-        <input type="tel" id="uTel" placeholder="เบอร์โทรศัพท์">
+        <input type="text" id="realName" placeholder="ชื่อ-นามสกุล" style="margin-top:10px;">
+        <input type="tel" id="phoneNumber" placeholder="เบอร์โทรศัพท์">
     </div>
-    
-    <button class="btn btn-pink" onclick="saveDataNow()">ส่งข้อมูลแจ้งหาย</button>
-    <button class="btn" onclick="showSection('homePage')">ย้อนกลับ</button>
+    <button class="btn btn-pink" onclick="saveLostItem()">ส่งข้อมูลแจ้งหาย</button>
+    <button class="btn" onclick="navigateTo('homeView')">ย้อนกลับ</button>
 </div>
 
-<div id="listPage" class="container hidden admin-only">
+<div id="listView" class="container hidden admin-only">
     <h3>📋 รายการแจ้งหาย (เจ้าหน้าที่)</h3>
-    <div id="displayArea"></div>
-    <button class="btn btn-dark" onclick="showSection('homePage')" style="margin-top: 20px;">กลับหน้าหลัก</button>
+    <div id="listArea"></div>
+    <button class="btn btn-dark" onclick="navigateTo('homeView')" style="margin-top: 20px;">กลับหน้าหลัก</button>
 </div>
 
 <script>
-    let db = JSON.parse(localStorage.getItem('yrc_final_storage_v3') || '[]');
-    let userSession = null;
-    let base64Data = null;
+    // ใช้ชื่อตัวแปรที่แตกต่างเพื่อเลี่ยงบั๊กเดิม
+    let mainDatabase = JSON.parse(localStorage.getItem('YRC_APP_DATA_V4') || '[]');
+    let currentSession = null;
+    let currentImageBase64 = null;
 
-    function handleLoginNow() {
-        const id = document.getElementById('loginID').value;
-        const pw = document.getElementById('loginPass').value;
-        
-        if(id === "SPYyupparaj" && pw === "yrcschool@120y") {
-            userSession = { role: 'admin', name: 'เจ้าหน้าที่ สปย.' };
-            document.getElementById('adminMenu').classList.remove('hidden');
-        } else if(id.length === 5) {
-            userSession = { role: 'student', name: 'นักเรียน (' + id + ')' };
-            document.getElementById('adminMenu').classList.add('hidden');
-        } else { 
-            return alert("รหัสผ่านไม่ถูกต้อง"); 
+    function navigateTo(viewId) {
+        // ล็อคหน้ารายการสำหรับครูเท่านั้น
+        if(viewId === 'listView' && (!currentSession || currentSession.role !== 'admin')) {
+            alert("คุณไม่มีสิทธิ์เข้าถึงหน้านี้");
+            return;
         }
-        
-        document.getElementById('userDisp').innerText = userSession.name;
-        showSection('homePage');
+        document.querySelectorAll('.container').forEach(div => div.classList.add('hidden'));
+        document.getElementById(viewId).classList.remove('hidden');
+        document.getElementById('appHeader').classList.toggle('hidden', viewId === 'loginView');
+        if(viewId === 'listView') refreshList();
     }
 
-    function showSection(id) {
-        // ป้องกันเด็กแอบเข้าหน้า List
-        if(id === 'listPage' && userSession.role !== 'admin') {
-            alert("สิทธิ์ไม่พอ: เฉพาะเจ้าหน้าที่เท่านั้นที่ดูได้");
+    function executeAppLogin() {
+        const u = document.getElementById('userField').value.trim();
+        const p = document.getElementById('passField').value.trim();
+        
+        if (!u || !p) {
+            alert("กรุณากรอกข้อมูลให้ครบถ้วน");
             return;
         }
 
-        document.querySelectorAll('.container').forEach(c => c.classList.add('hidden'));
-        document.getElementById(id).classList.remove('hidden');
-        document.getElementById('mainHeader').classList.toggle('hidden', id === 'loginPage');
-        if(id === 'listPage') renderList();
+        if(u === "SPYyupparaj" && p === "yrcschool@120y") {
+            currentSession = { role: 'admin', name: 'เจ้าหน้าที่ สปย.' };
+            document.getElementById('adminPanel').classList.remove('hidden');
+        } else if(u.length === 5 && !isNaN(u)) {
+            currentSession = { role: 'student', name: 'นักเรียน (' + u + ')' };
+            document.getElementById('adminPanel').classList.add('hidden');
+        } else { 
+            alert("รหัสผู้ใช้หรือรหัสผ่านไม่ถูกต้อง"); 
+            return;
+        }
+        
+        document.getElementById('displayUserName').innerText = currentSession.name;
+        navigateTo('homeView');
     }
 
-    function handlePreview(input) {
+    function handleFilePreview(input) {
         if (input.files && input.files[0]) {
             const reader = new FileReader();
             reader.onload = e => { 
-                base64Data = e.target.result;
-                document.getElementById('imgView').src = base64Data;
+                currentImageBase64 = e.target.result;
+                document.getElementById('imgView').src = currentImageBase64;
                 document.getElementById('imgView').style.display = 'block';
             };
             reader.readAsDataURL(input.files[0]);
         }
     }
 
-    function saveDataNow() {
+    function saveLostItem() {
         const name = document.getElementById('itemName').value;
-        const tel = document.getElementById('uTel').value;
-        if(!name || !tel) return alert("กรุณากรอกชื่อของและเบอร์โทร");
+        const tel = document.getElementById('phoneNumber').value;
+        if(!name || !tel) return alert("กรุณากรอกชื่อสิ่งของและเบอร์โทร");
         
-        db.push({ 
-            id: Date.now(), 
-            name, 
+        mainDatabase.push({ 
+            id: Date.now(), name, 
             loc: document.getElementById('itemLoc').value, 
             desc: document.getElementById('itemDesc').value, 
-            img: base64Data, 
-            uName: document.getElementById('uName').value, 
+            img: currentImageBase64, 
+            uName: document.getElementById('realName').value, 
             uTel: tel,
             date: new Date().toLocaleString('th-TH')
         });
         
-        localStorage.setItem('yrc_final_storage_v3', JSON.stringify(db));
-        alert("ส่งข้อมูลแจ้งหายเรียบร้อยแล้ว เจ้าหน้าที่จะรีบดำเนินการให้ครับ");
+        localStorage.setItem('YRC_APP_DATA_V4', JSON.stringify(mainDatabase));
+        alert("แจ้งหายสำเร็จ!");
         
         // Reset Form
         document.getElementById('itemName').value = "";
-        document.getElementById('uTel').value = "";
-        base64Data = null;
+        document.getElementById('phoneNumber').value = "";
+        currentImageBase64 = null;
         document.getElementById('imgView').style.display = 'none';
-        
-        showSection('homePage');
+        navigateTo('homeView');
     }
 
-    function deleteItem(id) {
-        if(confirm("ยืนยันว่าเด็กมารับของเรียบร้อยแล้วใช่หรือไม่? รายการจะถูกลบออกจากระบบ")) {
-            db = db.filter(item => item.id !== id);
-            localStorage.setItem('yrc_final_storage_v3', JSON.stringify(db));
-            renderList();
+    function confirmClaimed(id) {
+        if(confirm("ยืนยันว่าเด็กมารับของแล้ว?")) {
+            mainDatabase = mainDatabase.filter(item => item.id !== id);
+            localStorage.setItem('YRC_APP_DATA_V4', JSON.stringify(mainDatabase));
+            refreshList();
         }
     }
 
-    function renderList() {
-        const area = document.getElementById('displayArea');
-        area.innerHTML = db.slice().reverse().map(i => `
+    function refreshList() {
+        const area = document.getElementById('listArea');
+        area.innerHTML = mainDatabase.slice().reverse().map(i => `
             <div class="item-card">
-                ${i.img ? <img src="${i.img}" style="width:100%; border-radius:15px; margin-bottom:15px;"> : ''}
+                ${i.img ? `<img src="${i.img}" style="width:100%; border-radius:15px; margin-bottom:15px;">` : ''}
                 <b style="color:var(--yrc-pink); font-size: 18px;">📦 ${i.name}</b><br>
                 <div style="margin-top: 8px; font-size: 14px;"><b>📍 สถานที่:</b> ${i.loc}</div>
                 <div style="color: #666; font-size: 14px; margin-top: 5px;">${i.desc}</div>
-                <div style="color: #999; font-size: 12px; margin-top: 5px;">🕒 เมื่อ: ${i.date}</div>
                 <div class="spy-contact">
-                <b>🔓 ข้อมูลติดต่อ:</b> ${i.uName} (${i.uTel})
+                    <b>🔓 ติดต่อ:</b> ${i.uName} (${i.uTel})<br>
+                                <small>🕒 เมื่อ: ${i.date}</small>
                 </div>
-                <button class="btn btn-success" onclick="deleteItem(${i.id})">✅ เด็กมารับของแล้ว (ลบออก)</button>
+                <button class="btn btn-success" onclick="confirmClaimed(${i.id})">✅ เด็กมารับของแล้ว</button>
             </div>
-        `).join('') || '<p style="color:#999; margin-top:20px;">ยังไม่มีข้อมูลการแจ้งหาย</p>';
+        `).join('') || '<p style="color:#999; margin-top:20px;">ยังไม่มีข้อมูล</p>';
     }
 </script>
 </body>
