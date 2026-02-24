@@ -6,9 +6,25 @@
     <title>YRC Lost & Found Official</title>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
-        :root { --yrc-pink: #e10098; --yrc-pink-dark: #b5007a; --dark: #2d3436; --bg: #f7f9fc; }
+        :root { 
+            --yrc-pink: #e10098; 
+            --yrc-pink-dark: #b5007a; 
+            --dark: #2d3436; 
+        }
+
         * { box-sizing: border-box; font-family: 'Kanit', sans-serif; }
-        body { background-color: var(--bg); margin: 0; padding-top: 70px; }
+        
+        body { 
+            /* ใส่ลิงก์รูปภาพของน้องเป็นพื้นหลัง */
+            background-image: linear-gradient(rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.6)), 
+                              url('https://cdn.phototourl.com/uploads/2026-02-24-35dc78c2-07d5-409b-969d-35fb2cad1a46.jpg'); 
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            margin: 0; 
+            padding-top: 70px; 
+            min-height: 100vh;
+        }
         
         header {
             background: linear-gradient(135deg, var(--yrc-pink), var(--yrc-pink-dark));
@@ -17,28 +33,28 @@
         }
 
         .container {
-            max-width: 500px; width: 92%; background: white; padding: 30px 20px;
-            border-radius: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            max-width: 500px; width: 92%; background: rgba(255, 255, 255, 0.95); padding: 35px 25px;
+            border-radius: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.1);
             margin: 20px auto; text-align: center;
         }
 
         .hidden { display: none !important; }
 
         input, textarea, select {
-            width: 100%; padding: 15px; border: 2px solid #edf2f7; border-radius: 15px;
-            font-size: 16px; margin-bottom: 12px; outline: none; background: #f8fafc;
+            width: 100%; padding: 16px; border: 2px solid #edf2f7; border-radius: 18px;
+            font-size: 16px; margin-bottom: 15px; outline: none; background: white;
         }
 
         .btn {
-            width: 100%; padding: 16px; border: none; border-radius: 15px; font-size: 17px;
+            width: 100%; padding: 18px; border: none; border-radius: 20px; font-size: 18px;
             font-weight: 600; cursor: pointer; transition: 0.3s; margin-top: 10px;
         }
         .btn-pink { background: var(--yrc-pink); color: white; }
         .btn-dark { background: var(--dark); color: white; }
 
         .item-card {
-            background: white; border-radius: 20px; padding: 15px; margin-bottom: 15px;
-            text-align: left; border-left: 6px solid var(--yrc-pink); box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+            background: white; border-radius: 20px; padding: 18px; margin-bottom: 15px;
+            text-align: left; border-left: 8px solid var(--yrc-pink); box-shadow: 0 4px 15px rgba(0,0,0,0.05);
         }
 
         .spy-contact {
@@ -46,74 +62,74 @@
             padding: 12px; border-radius: 12px; margin-top: 10px; color: var(--yrc-pink-dark);
         }
 
-        .img-preview { width: 100%; border-radius: 15px; margin-bottom: 15px; display: none; object-fit: cover; max-height: 250px; }
+        .img-preview { width: 100%; border-radius: 20px; margin-bottom: 15px; display: none; object-fit: cover; max-height: 250px; }
     </style>
 </head>
 <body>
 
 <header id="mainHeader" class="hidden">
-    <div style="font-weight:600;">🌸 YRC LOST & FOUND</div>
-    <div onclick="location.reload()" style="cursor:pointer; font-size:13px; opacity:0.8;">ออกจากระบบ</div>
+    <div style="display: flex; align-items: center; gap: 10px;">
+        <img src="https://cdn.phototourl.com/uploads/2026-02-24-35dc78c2-07d5-409b-969d-35fb2cad1a46.jpg" style="height: 35px; width: 35px; border-radius: 50%; object-fit: cover; border: 2px solid white;">
+        <div style="font-weight:600; letter-spacing: 1px;">YRC LOST & FOUND</div>
+    </div>
+    <div onclick="location.reload()" style="cursor:pointer; font-size:14px; opacity:0.9;">ออกจากระบบ</div>
 </header>
 
 <div id="loginPage" class="container">
-    <img src="https://www.yrc.ac.th/wp-content/uploads/2019/03/yrc_logo.png" style="width: 80px; margin-bottom: 15px;">
-    <h2>เข้าสู่ระบบแจ้งของหาย</h2>
+    <img src="https://cdn.phototourl.com/uploads/2026-02-24-35dc78c2-07d5-409b-969d-35fb2cad1a46.jpg" style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; margin-bottom: 20px; border: 4px solid var(--yrc-pink); box-shadow: 0 5px 20px rgba(0,0,0,0.1);">
+    <h2 style="margin-bottom: 5px;">YRC Lost & Found</h2>
+    <p style="color: #666; margin-bottom: 25px;">ระบบแจ้งของหาย อาคารสปย.</p>
     <input type="text" id="loginID" placeholder="รหัสนักเรียน 5 หลัก / บัญชีครู">
     <input type="password" id="loginPass" placeholder="รหัสผ่าน">
     <button class="btn btn-pink" onclick="handleLogin()">เข้าสู่ระบบ</button>
 </div>
 
 <div id="homePage" class="container hidden">
-    <h3 id="userDisp">สวัสดี</h3>
-    <button class="btn btn-pink" style="height:100px; margin-bottom:15px;" onclick="showSection('formPage')">📝 แจ้งทำของหายใหม่</button>
-    <button class="btn btn-dark" style="height:100px;" onclick="showSection('listPage')">🔍 ดูประกาศทั้งหมด</button>
+    <h3 style="text-align: left; color: var(--yrc-pink);">สวัสดีคุณ <span id="userDisp"></span></h3>
+    <button class="btn btn-pink" style="height:120px; margin-bottom:20px; font-size: 20px;" onclick="showSection('formPage')">📝 แจ้งทำของหายใหม่</button>
+    <button class="btn btn-dark" style="height:120px; font-size: 20px;" onclick="showSection('listPage')">🔍 ดูรายการทั้งหมด</button>
 </div>
 
 <div id="formPage" class="container hidden">
-    <h3>📝 รายละเอียดสิ่งของ</h3>
-    <input type="text" id="itemName" placeholder="ของที่หาย (เช่น กุญแจรถ)">
+    <h3 style="margin-top: 0;">📝 รายละเอียดสิ่งของ</h3>
+    <input type="text" id="itemName" placeholder="ชื่อสิ่งของที่หาย">
     <input type="text" id="itemLoc" placeholder="สถานที่คาดว่าหาย">
-    <textarea id="itemDesc" placeholder="รายละเอียดอื่นๆ (สี, ยี่ห้อ)"></textarea>
+    <textarea id="itemDesc" rows="3" placeholder="รายละเอียดอื่นๆ (สี, ตำหนิ)"></textarea>
     
-    <label style="font-size:13px; display:block; text-align:left; margin-bottom:5px; color:#666;">📸 แนบรูปภาพ:</label>
+    <label style="display: block; text-align: left; margin-bottom: 8px; font-size: 14px; color: #555;">📸 แนบรูปภาพประกอบ:</label>
     <input type="file" accept="image/*" onchange="previewImg(this)">
     <img id="imgView" class="img-preview">
 
-    <div style="background:#f0f7ff; padding:15px; border-radius:15px; margin-top:10px;">
-        <p style="margin:0 0 10px; font-weight:600; font-size:14px; color:#0056b3;">📞 ข้อมูลติดต่อ (ครูสปย.เห็นเท่านั้น)</p>
-        <input type="text" id="uName" placeholder="ชื่อ-นามสกุลจริง">
+    <div style="background:#f0f7ff; padding:20px; border-radius:20px; margin-top:10px; text-align: left;">
+        <label style="font-weight: 600; color: #0056b3; font-size: 14px;">📞 ข้อมูลติดต่อ (เฉพาะ สปย. เห็น)</label>
+        <input type="text" id="uName" placeholder="ชื่อ-นามสกุล" style="margin-top:10px;">
         <input type="tel" id="uTel" placeholder="เบอร์โทรศัพท์">
     </div>
     
-    <button class="btn btn-pink" onclick="saveData()">ส่งข้อมูลให้ สปย.</button>
-    <button class="btn" onclick="showSection('homePage')">ยกเลิก</button>
+    <button class="btn btn-pink" onclick="saveData()">ส่งข้อมูลแจ้งหาย</button>
+    <button class="btn" onclick="showSection('homePage')">ย้อนกลับ</button>
 </div>
 
 <div id="listPage" class="container hidden">
     <h3>📋 รายการแจ้งหายล่าสุด</h3>
     <div id="displayArea"></div>
-    <button class="btn btn-dark" onclick="showSection('homePage')">กลับหน้าหลัก</button>
+    <button class="btn btn-dark" onclick="showSection('homePage')" style="margin-top: 20px;">กลับหน้าหลัก</button>
 </div>
 
 <script>
-    let db = JSON.parse(localStorage.getItem('yrc_lost_db') || '[]');
+    let db = JSON.parse(localStorage.getItem('yrc_final_storage') || '[]');
     let currentUser = null;
     let base64Img = null;
 
     function handleLogin() {
         const id = document.getElementById('loginID').value;
         const pw = document.getElementById('loginPass').value;
-        
         if(id === "SPYyupparaj" && pw === "yrcschool@120y") {
             currentUser = { role: 'admin', name: 'เจ้าหน้าที่ สปย.' };
         } else if(id.length === 5) {
-            currentUser = { role: 'student', name: id };
-        } else {
-            return alert("รหัสผ่านไม่ถูกต้อง");
-        }
-        
-        document.getElementById('userDisp').innerText = "ยินดีต้อนรับคุณ " + currentUser.name;
+            currentUser = { role: 'student', name: 'นักเรียน (' + id + ')' };
+        } else { return alert("รหัสผ่านไม่ถูกต้อง"); }
+        document.getElementById('userDisp').innerText = currentUser.name;
         showSection('homePage');
     }
 
@@ -139,20 +155,9 @@
     function saveData() {
         const name = document.getElementById('itemName').value;
         const tel = document.getElementById('uTel').value;
-        if(!name || !tel) return alert("กรุณากรอกชื่อของและเบอร์โทร!");
-
-        const item = {
-            id: Date.now(),
-            name: name,
-            loc: document.getElementById('itemLoc').value,
-            desc: document.getElementById('itemDesc').value,
-            img: base64Img,
-            uName: document.getElementById('uName').value,
-            uTel: tel
-        };
-
-        db.push(item);
-        localStorage.setItem('yrc_lost_db', JSON.stringify(db));
+        if(!name || !tel) return alert("กรุณากรอกชื่อของและเบอร์โทร");
+        db.push({ id: Date.now(), name, loc: document.getElementById('itemLoc').value, desc: document.getElementById('itemDesc').value, img: base64Img, uName: document.getElementById('uName').value, uTel: tel });
+        localStorage.setItem('yrc_final_storage', JSON.stringify(db));
         alert("ส่งข้อมูลสำเร็จ!");
         showSection('homePage');
     }
@@ -161,19 +166,13 @@
         const area = document.getElementById('displayArea');
         area.innerHTML = db.slice().reverse().map(i => `
             <div class="item-card">
-                ${i.img ? <img src="${i.img}" style="width:100%; border-radius:10px; margin-bottom:10px;"> : ''}
-                <b style="color:var(--yrc-pink); font-size:18px;">📦 ${i.name}</b><br>
-                <small>📍 สถานที่: ${i.loc}</small>
-                <p style="font-size:14px; color:#666; margin:5px 0;">${i.desc}</p>
-                ${currentUser.role === 'admin' ? `
-                    <div class="spy-contact">
-                        <b>🔒 ข้อมูลสำหรับ สปย.</b><br>
-                        ผู้แจ้ง: ${i.uName}<br>
-                        โทร: <a href="tel:${i.uTel}">${i.uTel}</a>
-                    </div>
-                ` : '<p style="font-size:11px; color:#999;">* ข้อมูลติดต่อเป็นความลับเฉพาะ สปย.</p>'}
+                ${i.img ? <img src="${i.img}" style="width:100%; border-radius:15px; margin-bottom:15px;"> : ''}
+                <b style="color:var(--yrc-pink); font-size: 18px;">📦 ${i.name}</b><br>
+                <div style="margin-top: 8px;"><b>📍 สถานที่:</b> ${i.loc}</div>
+                <div style="color: #666; font-size: 14px; margin-top: 5px;">${i.desc}</div>
+                ${currentUser.role === 'admin' ? <div class="spy-contact"><b>🔓 ข้อมูลติดต่อ:</b> ${i.uName} (${i.uTel})</div> : ''}
             </div>
-        `).join('') || 'ไม่มีข้อมูลการแจ้งหาย';
+        `).join('') || '<p style="color:#999;">ยังไม่มีข้อมูลการแจ้งหาย</p>';
     }
 </script>
 </body>
