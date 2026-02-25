@@ -85,7 +85,7 @@
     <p style="font-size: 13px; color: #666; margin-bottom: 15px;">กรุณากรอกข้อมูลให้ครบถ้วนทุกช่อง</p>
     
     <input type="text" id="f_item" placeholder="ชื่อสิ่งของที่หาย *">
-    <input type="text" id="f_loc" placeholder="สถานที่ที่หาย *">
+    <input type="text" id="f_loc" placeholder="สถานที่ที่คาดว่าหาย *">
     <textarea id="f_desc" rows="3" placeholder="รายละเอียดลักษณะของสิ่งของ *"></textarea>
     
     <div style="text-align: left; margin-bottom: 15px;">
@@ -95,8 +95,8 @@
     </div>
 
     <div style="background:#f0f7ff; padding:20px; border-radius:20px; text-align: left; border: 1px solid #d0e7ff;">
-        <label style="font-weight: 600; color: #0056b3;">📞 ข้อมูลผู้แจ้ง (ครูใช้ติดต่อคืนของ)</label>
-        <input type="text" id="f_name" placeholder="ชื่อ-นามสกุล จริง *" style="margin-top:10px;">
+        <label style="font-weight: 600; color: #0056b3;">📞 ข้อมูลผู้แจ้ง (สำหรับใช้ติดต่อคืนของ)</label>
+        <input type="text" id="f_name" placeholder="ชื่อ-นามสกุล *" style="margin-top:10px;">
         <input type="tel" id="f_tel" placeholder="เบอร์โทรศัพท์ (10 หลัก) *" maxlength="10">
     </div>
     
@@ -187,7 +187,7 @@
 
         localDB.push(newData);
         localStorage.setItem('YRC_LOST_STRICT_V6', JSON.stringify(localDB));
-        alert("✅ ส่งข้อมูลสำเร็จ! กรุณารอรับการติดต่อกลับจากครู สปย.");
+        alert("✅ ส่งข้อมูลสำเร็จ! กรุณารอรับการติดต่อกลับจากงานสปย.");
         
         // Reset Form
         document.getElementById('f_item').value = "";
