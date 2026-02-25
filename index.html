@@ -47,7 +47,6 @@
             padding: 12px; border-radius: 12px; margin-top: 10px; color: var(--yrc-pink-dark);
         }
         .img-preview { width: 100%; border-radius: 20px; margin-bottom: 15px; display: none; object-fit: cover; max-height: 250px; }
-        .required-star { color: red; }
     </style>
 </head>
 <body>
@@ -71,10 +70,13 @@
 
 <div id="homeView" class="container hidden">
     <h3 style="text-align: left; color: var(--yrc-pink);">สวัสดีคุณ <span id="userNameShow"></span></h3>
-    <button class="btn btn-pink" style="height:120px; margin-bottom:20px;" onclick="goPage('formView')">📝 แจ้งทำของหายใหม่</button>
+    
+    <div id="studentArea" class="hidden">
+        <button class="btn btn-pink" style="height:120px; margin-bottom:20px;" onclick="goPage('formView')">📝 แจ้งทำของหายใหม่</button>
+    </div>
+
     <div id="adminArea" class="hidden">
-        <hr style="border: 1px solid #eee; margin: 20px 0;">
-        <button class="btn btn-dark" style="height:100px;" onclick="goPage('listView')">🔍 ดูรายการที่ได้รับแจ้ง (เจ้าหน้าที่)</button>
+        <button class="btn btn-dark" style="height:120px;" onclick="goPage('listView')">🔍 ดูรายการที่ได้รับแจ้ง (เจ้าหน้าที่)</button>
     </div>
 </div>
 
@@ -123,12 +125,18 @@
     function doLogin() {
         const u = document.getElementById('userInput').value.trim();
         const p = document.getElementById('passInput').value.trim();
+        
+        const studentArea = document.getElementById('studentArea');
+        const adminArea = document.getElementById('adminArea');
+
         if(u === "SPYyupparaj" && p === "yrcschool@120y") {
             session = { role: 'admin', name: 'เจ้าหน้าที่ สปย.' };
-            document.getElementById('adminArea').classList.remove('hidden');
+            adminArea.classList.remove('hidden');
+            studentArea.classList.add('hidden'); // ซ่อนส่วนแจ้งของหาย
         } else if(u.length === 5) {
             session = { role: 'student', name: 'นักเรียน (' + u + ')' };
-            document.getElementById('adminArea').classList.add('hidden');
+            studentArea.classList.remove('hidden');
+            adminArea.classList.add('hidden'); // ซ่อนส่วนเจ้าหน้าที่
         } else {
             alert("รหัสไม่ถูกต้อง"); return;
         }
@@ -149,27 +157,23 @@
     }
 
     function doSave() {
-        // ดึงค่าจาก input
         const item = document.getElementById('f_item').value.trim();
         const loc = document.getElementById('f_loc').value.trim();
         const desc = document.getElementById('f_desc').value.trim();
         const name = document.getElementById('f_name').value.trim();
         const tel = document.getElementById('f_tel').value.trim();
 
-        // 1. ตรวจสอบว่ากรอกครบทุกช่องไหม (ยกเว้นรูป)
         if(!item || !loc || !desc || !name || !tel) {
             alert("❌ กรุณากรอกข้อมูลให้ครบทุกช่องก่อนส่ง!");
             return;
         }
 
-        // 2. ตรวจสอบเบอร์โทรศัพท์ (ต้องเป็นตัวเลขและครบ 10 หลัก)
         const telPattern = /^[0-9]{10}$/;
         if(!telPattern.test(tel)) {
-            alert("❌ กรุณากรอกเบอร์โทรศัพท์ให้ถูกต้องและครบ 10 หลัก (ตัวเลขเท่านั้น)");
+            alert("❌ กรุณากรอกเบอร์โทรศัพท์ให้ถูกต้องและครบ 10 หลัก");
             return;
         }
 
-        // ถ้าผ่านทุกเงื่อนไข บันทึกข้อมูล
         const newData = {
             id: Date.now(),
             itemName: item,
@@ -185,7 +189,7 @@
         localStorage.setItem('YRC_LOST_STRICT_V6', JSON.stringify(localDB));
         alert("✅ ส่งข้อมูลสำเร็จ! กรุณารอรับการติดต่อกลับจากครู สปย.");
         
-        // ล้างข้อมูล
+        // Reset Form
         document.getElementById('f_item').value = "";
         document.getElementById('f_loc').value = "";
         document.getElementById('f_desc').value = "";
@@ -204,7 +208,8 @@
             renderData();
         }
     }
-function renderData() {
+
+    function renderData() {
         const area = document.getElementById('renderArea');
         area.innerHTML = localDB.slice().reverse().map(i => `
             <div class="item-card">
@@ -224,3 +229,4 @@ function renderData() {
 </script>
 </body>
 </html>
+
